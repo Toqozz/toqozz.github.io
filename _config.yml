@@ -11,9 +11,10 @@
 
 # Build settings
 markdown: kramdown
-theme: jekyll-theme-console
+#theme: jekyll-theme-console
 plugins:
   - jekyll-feed
+  - jekyll-seo-tag
 
 header_pages:
     - index.md

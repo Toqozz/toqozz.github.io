@@ -1,0 +1,16 @@
+/**
+ * Style variables
+ */
+$base-color:           #ebdbb2 !default;
+$primary-color:        #928374 !default;
+$text-color:           $base-color !default;
+$line-color:           #83a598 !default;
+$text-underline-color: $primary-color !default;
+$placeholder-color:    $base-color !default;
+$link-color:           $base-color !default;
+$border:               solid 1px $line-color !default;
+$selection-background: #ebdbb2 !default;
+$selection-text:       #282828 !default;
+$background-color:     #282828 !default;
+
+@import "base";
