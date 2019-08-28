@@ -5,7 +5,7 @@ description: Memory dump, and things I wish I found on google before now.
 #line in _config.yml. It will appear in your document head meta (for
 #Google search results) and in your feed.xml site description.
 #baseurl: "" # the subpath of your site, e.g. /blog
-#url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://toqozz.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: Toqoz_
 github_username: Toqozz
 
@@ -15,6 +15,7 @@ markdown: kramdown
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+  - jekyll-sitemap
 
 header_pages:
     - index.md
