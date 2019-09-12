@@ -419,7 +419,7 @@ public class PressEToInsert : MonoBehaviour {
 
 Note that both of the above scripts are attached to the object in this example, but it might make more sense to put the "Press E" logic on the player -- it's just easier to provide a snippet like this.
 
-Here's an example (red cube -- ruby item, white cube, player):
+Here's an example (red cube -- ruby item, white cube -- player):
 ![Pickup demonstration](/assets/2018_inventory_pickup_demo.gif)
 
 And we can verify that the item was in fact inserted into the inventory by inspecting `Inventory.Instance` in a debugger (there should be one built into your IDE, I'm using [Rider](https://www.jetbrains.com/rider/)):
