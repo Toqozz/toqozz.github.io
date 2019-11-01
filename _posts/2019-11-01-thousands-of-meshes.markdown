@@ -8,7 +8,7 @@ categories:
 # Drawing (hundreds of) thousands of meshes in Unity
 ![Demo gif](/assets/2019_mesh_spiral.gif)
 
-GPU instancing is a technique offered by Unity to draw lots of the same mesh and material quickly.
+GPU instancing is a graphics technique available in Unity to draw lots of the same mesh and material quickly.
 
 In the right circumstances, GPU instancing can allow you to feasibly draw even millions of meshes.  Unity tries to make this work automatically for you if it can.  If all your meshes use the same material, 'GPU Instancing' is ticked, your shader supports instancing, lighting and shadows play nicely, you're not using a skinned mesh renderer, etc, Unity will automatically batch meshes into a single draw call.
 > A low number of draw calls is usually a sign of a well-performing game.  For each new draw call, the GPU has to do a context switch, which is *expensive*.
