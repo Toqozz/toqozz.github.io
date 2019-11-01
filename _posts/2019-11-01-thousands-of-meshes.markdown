@@ -1,16 +1,16 @@
 ---
 layout: post
-title: "Drawing Thousands of Meshes with DrawMeshInstanced/Indirect in Unity"
+title: "Drawing thousands of meshes with DrawMeshInstanced/Indirect in Unity"
 date: 2019-11-01
 categories:
 ---
 
-# Drawing (Hundreds of) Thousands of Meshes in Unity.
+# Drawing (hundreds of) thousands of meshes in Unity
 ![Demo gif](/assets/2019_mesh_spiral.gif)
 
 GPU instancing is a technique offered by Unity to draw lots of the same mesh and material quickly.
 
-In the right circumstances, GPU instancing can allow you to feasibly draw even millions of meshes.  Unity tries to make this work automatically for you if it can.  If all your meshes use the same material, 'GPU Instancing' is ticked, your shadere supports instancing, lighting and shadows play nicely, you're not using a skinned mesh renderer, etc, Unity will automatically batch meshes into a single draw call.
+In the right circumstances, GPU instancing can allow you to feasibly draw even millions of meshes.  Unity tries to make this work automatically for you if it can.  If all your meshes use the same material, 'GPU Instancing' is ticked, your shader supports instancing, lighting and shadows play nicely, you're not using a skinned mesh renderer, etc, Unity will automatically batch meshes into a single draw call.
 > A low number of draw calls is usually a sign of a well-performing game.  For each new draw call, the GPU has to do a context switch, which is *expensive*.
 
 There's a lot of ifs and buts here, which is a pain in the ass if you just want to write performant code, and even if you do get GPU instancing to work, the overhead of `GameObject`s and `Transform`s alone is *huge*.
@@ -309,7 +309,7 @@ Shader "Custom/InstancedIndirectColor" {
 *1022 meshes drawn with `DrawMeshInstancedIndirect`*
 
 A key difference here is that with `DrawMeshInstanced`, we were giving Unity an array of matrices and having it automagically figure out vertex positions before we got to the shader.  Here, we're being much more direct in that we're pushing the matrices to the GPU and applying the transformation ourselves.  The shader instancing code has been cut down significantly, which is nice, and we've gained about a millisecond in rendering.
-Note, however, that this number is heavily influenced by the rest of the game.  In our basic scene with nothing happening, bandwidth and CPU time is abundant, so the benefits of `Indirect` are less prevelant than in the real world.
+Note, however, that this number is heavily influenced by the rest of the game.  In our basic scene with nothing happening, bandwidth and CPU time is abundant, so the benefits of `Indirect` are less prevalent than in the real world.
 
 The 1023 mesh limit has also disappeared.  Pushing the population up to even 100, 000 has little affect on my system (Ryzen 1700, 1080Ti):
 
