@@ -8,7 +8,6 @@ categories:
 # Creating a utility window using properties in Xlib/X11
 [Yarn](https://github.com/Toqozz/yarn) is a notification daemon designed to be a more visually featureful alternative to the beloved [dunst](https://github.com/dunst-project/dunst).  It was important to me that Yarn be at least as lightweight as dunst, which meant avoiding GTK/Qt and drawing with Xlib/Cairo instead.
 
-&nbsp;
 The main thing this meant was that I had to interface with X11 directly.  I wanted a pure X11 utility window -- no window manager positioning, no window borders, just compositor shadows.
 
 ![Pure utility window](/assets/2018_pure_utility_window.png)
@@ -21,7 +20,6 @@ The advantage of a window like this is that it can be placed anywhere by us, and
 To understand what goes into this, we should first have some knowledge on how X11/Xlib actually interacts with the window manager.  
 In the basic sense, when we first create a window using `XCreateWindow()`, it creates an object with a number of default parameters.  Later, the window manager reads these parameters and decides exactly how to show the window.  As long as your window manager supports the parameters / hints that you want to use, we simply need to provide the WM with these hints.
 
-&nbsp;
 When creating a new window with Xlib, it typically looks a little like the following:
 ```c
 // Return a window.
@@ -102,20 +100,16 @@ This function demonstrates the general method of assigning a few properties to y
 1. Get the atom of the property/properties that you want to set or add using `XInternAtom()`.
 2. Change / add to the window property using `XChangeProperty()`.
 
-&nbsp;
 I've made an effort to comment the code heavily so that it's easy to understand, particularly when viewed beside the Xlib function documentation.  Hopefully this is enough to make reasonable sense of the situation.
 
 ---
 
 One thing that was initially confusing to me was finding which atoms were available to use, and then figuring out which atoms I should actually use to accomplish what I wanted.
 
-&nbsp;
 To my understanding, properties starting with "`_NET`" are part of the newer XDG/Freedesktop window manager specification.  There are a lot more of these, and they are generally preferred over legacy variants.
 
-&nbsp;
 Freedesktop has a list of the available (newer) properties [here](https://specifications.freedesktop.org/wm-spec/1.3/ar01s05.html), whereas the older properties can be found [here](https://tronche.com/gui/x/xlib/ICC/).
 
-&nbsp;
 You can also use the `xprop` utility to see the properties of existing windows you're using.  This can be helpful in making complicated windows "just-so" and really understanding properties.  Under most distributions, `xprop` is available as the `xorg-xprop` package.
 
 ![Getting window properties with xprop](/assets/2018_xprop.png)

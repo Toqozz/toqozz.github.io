@@ -8,23 +8,19 @@ categories:
 # Making a painless inventory system with scriptable objects in Unity
 Something that might surprise you is that there is actually a lack of content on making easy to use inventory systems in Unity.
 
-&nbsp;
 When I say easy to use, I mean:
 - **Based on Scriptable Objects.**
 - Easily saved to and loaded from disk.
 - Resource efficient.
 - Integrates with the Unity UI.
 
-&nbsp;
 And I think that these points are quite significant, particularly the first, because it ties everything else together.  The majority of material I found online  ^[1](https://unity3d.com/learn/tutorials/projects/adventure-game-tutorial/inventory) ^[2](https://github.com/nzhul/inventory-system) ^[3](https://www.reddit.com/r/Unity3D/comments/6yt3e5/anybody_have_any_tips_on_a_scriptable_object/) ^[4...](https://answers.unity.com/questions/1260736/scriptable-objects-as-inventory-items-unable-to-sa.html) really doesn't explain much more than some tips on getting started, or misses these marks.  So my goal here is to try and collate the information and experience I gathered when writing our inventory system.
 
 # Why Scriptable Objects?
 Don't be alarmed if you haven't even heard of scriptable objects in Unity until now.  These things are severely underrepresented in the Unity documentation and examples.  Consequently, they seem to have a kind of air around them that suggests they're complicated and difficult to understand, when the opposite is true.  If you know what `MonoBehaviour` is, I'm sure `ScriptableObject` will be no stretch.
 
-&nbsp;
 Classes that inherit from `ScriptableObject` are essentially `MonoBehaviour` classes with the exception that they don't need to be attached to game objects.  In the right situation, this means that they can be much more versatile and efficient than their counterparts.  They also offer a powerful abstraction, which is often exactly what you want in complicated systems.
 
-&nbsp;
 Consider the following class structure:
 
 | Item | HealthPot : Item |
@@ -33,10 +29,8 @@ Consider the following class structure:
 
 We have two basic classes, one specifies a base item and the other specifies a health pot (which inherits from `Item`).
 
-&nbsp;
 In the interest of efficiency, we probably don't want these to be `MonoBehaviour` classes--that'd mean a new prefab for every item!  But what if we eventually wanted to attach an image, game object, or some other Unity construct to the item?  This is the use-case for scriptable objects.
 
-&nbsp;
 Scriptable objects provide access to all the engine structures and behaviour while maintaining a lightweight base.  Unlike `MonoBehaviour` classes, scriptable objects don't need to be attached to game objects -- they don't even need to be instanced in the scene.  They're also nicely tied into Unity; you can instance a scriptable object as an asset from an easy right click in your project directory, and that object can also be inspected and changed from the UI -- they're fully understood objects within the Unity ecosystem.  Code-based instantiation does of course still exist, but a real benefit here is being able to take hold of a real "physical" representation of your objects (designers take note!)
 
 ![Creating a scriptable object asset in Unity](/assets/2018_creating_unity_scriptableobject.gif)
@@ -77,10 +71,8 @@ public class Gem : Item {
 
 All our items look like this.  You'll notice a couple things related to scriptable objects here.
 
-&nbsp;
 `[System.Serializable]` makes our objects easily readable (as data), and is not specific to scriptable objects.  Serialization allows our objects to be viewed from the inspector, and also saved / loaded correctly.  A nice bonus of scriptable objects is that they fully support serialization, and overcome a lot of the [issues](http://theliquidfire.com/2018/04/16/scriptable-objects/) you might come across if you're using regular C# classes.
 
-&nbsp;
 We inherit from `ScriptableObject`, which allows us to use `GameObject` in our `physicalRepresentation` field.  This field contains an item prefab (our inventory is 3D); if you were making a 2D inventory, this would probably be an `Image` or something similar.
 
 ![Golemancer prototype inventory](/assets/2018_golemancer_prototype_inventory.png)
@@ -114,7 +106,6 @@ public class ItemInstance {
 
 We're storing the item template (and all its specific data), along with an *instance-specific* field.  A potential issue here is when we have items that do not have a quality: how do we distinguish?  You'll have to get a bit more creative with your `ItemInstance`'s to solve this.
 
-&nbsp;
 This is the first part of making our inventory painless -- designers can create new items and change them using only the UI.  We're using code to eventually actually create the items, but with some extra scaffolding you can tie even that to the UI.
 
 ---
@@ -221,17 +212,14 @@ public class Inventory : ScriptableObject {
 
 I've construed a lot of the save/load and instance behaviour from Richard Fine's [scriptable object example](https://bitbucket.org/richardfine/scriptableobjectdemo/src).  I don't pretend to be an expert on this code, but the methods here are quite honest.
 
-&nbsp;
 First of all, we have a getter whose goal is simply to maintain reference to the active inventory.  This is achieved by searching for all loaded objects of type inventory -- i.e. if there is an instance of `Inventory` available, it'll be assigned to `_instance` and returned.  For the most part this is just a fancy singleton.  It also makes use of `SaveManager` to automatically load the inventory as necessary -- more on this later.
 
-&nbsp;
 Next we have `InitializeFromDefault`, which initializes the inventory based on some default version.  This will be the "template" in your project directory -- *put it in the Resources folder*:
 
 ![Creating the inventory template](/assets/2018_unity_creating_inventory_template.gif)
 
 And the methods that follow are of course for reading and writing our object data to disk.  Nothing out of the ordinary here.  If your local inventory is valuable (should not be tampered with) you probably want to incorporate some encryption at this point.<br>`HideAndDontSave` tells Unity not to show the object in the hierarchy, and not to save it to the scene.
 
-&nbsp;
 What comes next shouldn't be too foreign.  These are all standard helper methods for managing an array.  After any operation that modifies the inventory, we call `Save()`, which will be discussed shortly.  We can afford to save every update in our game because it doesn't happen very frequently and the inventory isn't very large; if you have a particularly large inventory or update frequently, you might want to configure something less granular.<br>  We're also not checking for out of bounds exceptions here, which may be something useful to include.
 
 ## Saving
@@ -316,7 +304,6 @@ We now have a workable inventory backend.  To recap, our backend involves:
 # Frontend
 If we've succeeded in our goal (making the inventory painless to use), then developing the frontend should be quite simple.
 
-&nbsp;
 For this example, you should know that I've set up a few empty game objects to act as "slots", which have roughly the following script attached:
 
 ```cs
@@ -380,7 +367,6 @@ public class PhysicalInventory : MonoBehaviour {
 
 Pretty straightforward!  The inventory can be accessed from `Inventory.Instance`, no matter where we are, and will handle all its initialization on its own (saving, loading, initializing).  Very convenient.   
 
-&nbsp;
 The real frontend has a fair few additional methods, which you can take a look at in the git repo for this post: https://github.com/Toqozz/blog-code/tree/master/inventory.
 
 ---
@@ -388,7 +374,6 @@ The real frontend has a fair few additional methods, which you can take a look a
 # Actually Using It
 The idea is that you create a new `ItemInstance` through code when inserting an item into the inventory (or maybe when you spawn the object, or whatever works best).
 
-&nbsp;
 One way you could do this is by creating a new `MonoBehaviour` script which you'd attach to the `GameObject`, which would allow you to store the `ScriptableObject` representation;
 
 ```cs
@@ -428,4 +413,4 @@ And we can verify that the item was in fact inserted into the inventory by inspe
 
 Alternatively, you can do some poor mans debugging and scatter some `Debug.Log`s around to achieve roughly the same thing with less/more effort.
 
-> *Note:* I've edited this post since I made it, please please let me know if something isn't working as intended and I'll do my best correction: toqoz@hotmail.com
+> *Note:* I've edited this post since I made it, please please let me know if something isn't working as intended and I'll do my best correction: toqoz (at) hotmail (dot) com

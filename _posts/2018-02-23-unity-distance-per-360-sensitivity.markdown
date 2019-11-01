@@ -9,7 +9,6 @@ categories:
 Physical mouse distance to camera view movement can be an important attribute in some projects.  
 For particular games (primarly aim training games like [Kovaak's](https://store.steampowered.com/app/824270/KovaaKs_FPS_Aim_Trainer/)), it is important to be able to measure the physical mouse distance in relation to the camera.  Most commonly, this calculation is reffered to as the inches/cm per 360 sensitivity, and can be a useful metric in unfying look sensitivity between games.  There exist entire [sites](http://mouse-sensitivity.com/) dedicated to making this conversion.
 
-&nbsp;
 The scripts in this post will be Unity-specific, however the process should be able to be easily applied to any engine.
 
 # Rotation Degrees
@@ -69,7 +68,6 @@ public class MouseLook : MonoBehaviour {
 
 One irregularity here is that we're using `Input.GetAxisRaw()` rather than `Input.GetAxis()`.  To be honest, I haven't observed any differences between the two in regards to mouse input.  Allegedly, the former has no smoothing filtering applied, which is typically paramount if aim is important in your game.  Smoothing can always be implemented yourself, and in a much more controllable way than using Unity's inbuilt smoothing.<br/>
 
-&nbsp;
 There are a couple of niceties in this script that will make our life easier.  In particular, notice `rotationX`.  This variable is our rotation angle from the center in degrees; `rotationX` will be 180 when we're looking directly behind our camera's original position and 0 when we're looking straight ahead.  Using this variable, we can tell how far the camera is turned -- a step closer to calculating physical distance per 360 degrees.
 
 ![mouse look](/assets/2018_unity_mouse_look.gif)
@@ -98,7 +96,6 @@ cursorDistanceInches = cursorDistancePixels / Screen.dpi;
 
 Notice that we multiply Unity's mouse delta result by 20.  This is so that the value corresponds to 1 pixel = a delta of 1.  The value of `GetAxis()` and `GetAxisRaw()` is multiplied by the mouse axis' sensitivity value set by Unity's input manager (**Edit** -> **Project Settings** -> **Input**).  My version of Unity defaulted to 0.1, which somehow equates to a value of 0.05 being equal to 1 pixel worth of movement, so that's the basis I'll use for the rest of the post.  To avoid multiplying by 20, you could also just set the sensitivity Unity uses to 2.
 
-&nbsp;
 This delta value only shows change when the mouse moves at least a pixel, so higher resolution displays should be more accurate in theory.  If you want true delta, you'll have to access it through the OS -- [here's](https://docs.microsoft.com/en-us/windows/desktop/DxTechArts/taking-advantage-of-high-dpi-mouse-movement) a good starting point for Windows.
 
 > *Note:* I've heard that the value from `GetAxis()` / `GetAxisRaw()` can vary depending on mouse.  I haven't seen this behaviour myself, and it doesn't make sense that it should, but it's something to be careful of nonetheless.
@@ -107,7 +104,6 @@ This delta value only shows change when the mouse moves at least a pixel, so hig
 ## Mouse DPI
 Mouse DPI defines how many movements are measured over an inch.  At 400 DPI and assuming a perfect sensor / infinite polling rate, 400 instructions are reported to the OS for every inch of movement.  In reality it doesn't always work quite like this, but for our purposes we needn't bother with more specifics.
 
-&nbsp;
 It then follows that we should be able to simply divide the mouse delta by our dpi to achieve a physical distance.
 
 ## Application
@@ -204,30 +200,24 @@ public class MouseLook : MonoBehaviour {
 
 Now `mouseDistanceInches` holds the mouse distance in inches after a 360 degree turn.  As mentioned earlier, due to Unity's frame-by-frame nature this value won't be 100% on the nose, particularly if the mouse is moved quickly near the end of the rotation.  Logically, this is due to a high mouse delta being buffered over a frame.  That is, the mouse is moving faster than frames are being rendered.  If you require extreme (mid-frame) accuracy, look towards a framerate independent solution: http://www.sophiehoulden.com/super-fast-input-in-unity/.
 
-&nbsp;
 In the Unity project (linked at the bottom of the post), I've set up a nice debug UI that should make it easy to see what's going on with the various values.
 
 ![debug ui and 360 calculations](/assets/2018_debug_ui.gif)
 
 # Solving For Distance Mathematically
 Of course, once we've figured out the angle that a mouse delta of 1 relates to, we can solve distance for 360 degrees.
-&nbsp;
 If we set our look sensitivity to 1 (in the Unity inspector) so that it doesn't interfere with our mouse delta, we can use our current system to find that -- with the rotation method we're using -- 20 dots of mouse movement is equal to 1 degree of rotation.  
 
 ![1 degree = 20 dots](/assets/2018_1deg_20dots.gif)
 
 With this information we can associate 1 delta worth of movement with 0.05 degrees of rotation, when using a sensitivity of 1.  Given this, the following equation should calculate distance for a 360 given any sensitivity:
 
-&nbsp;
 (**360** / (*sensitivity* \* **0.05**)) / *DPI* = *mouse distance in inches*
 
-&nbsp;
 And to do the same calculation for sensitivity rather than distance:
 
-&nbsp;
 *mouse distance in inches* \* *DPI* / (**360** / **0.05**) = *sensitivity*
 
-&nbsp;
 And there you have it!  Physical mouse distance per 360 accurately calculated within Unity.  These scripts and formulas should work uniformly, though I have by no means done any extensive testing.<br/>
 Hopefully through reading this blog post you have gained the understanding to solve this problem for any engine, and fix any minor issues that may arise in the scripts posted here due to a Unity version change or otherwise.
 

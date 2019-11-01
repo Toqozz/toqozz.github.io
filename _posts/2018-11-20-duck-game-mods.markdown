@@ -5,7 +5,6 @@ date: 2018-11-20
 categories:
 ---
 
-
 # Everything you need to know about writing mods for Duck Game
 
 So you want to make some mods for Duck Game?  Look no further.  This guide should tell you almost everything you need to know about making a good mod that actually functions.  We'll talk about getting set up, explain some of Duck Game's core mod structure, talk about networking, and hopefully most of the other little details you might need.
@@ -15,7 +14,6 @@ So you want to make some mods for Duck Game?  Look no further.  This guide shoul
 # Is making mods difficult?  Can I write mods even if I don't have much experience?
 Mods for Duck Game can definitely be made with only a basic understanding of programming.  Whether those mods are spaghetti or not might be a different story, but making basic mods in Duck Game is relatively easy.
 
-&nbsp;
 Skills that may help significantly: knowledge of basic object oriented programming, basic C# knowledge, a bit of intuition in reading other people's code, and most of all, **time**.  You might have heard elsewhere that writing mods for Duck Game is very fiddly, and that's because it is.  A lot (most?) of your time will be spent reading through the Duck Game source code to try and figure out how the developer has achieved a similar effect to something you're trying to make, and then deciphering *why* exactly it has been done in that way.  If you don't have much in the way of these skills just yet, making mods can be a great learning experience.
 
 # Before Starting
@@ -97,13 +95,10 @@ namespace DuckGame
 ```
 Not so complicated!  We just assign some properties in the constructor related to the gun's look and feel, and then code the rest of the gun's behaviour by hooking into some functions.
 
-&nbsp;
 A big thing to recognise here is that Duck Game modding is largely made possible by method overriding.  I'm sure there's a name for this kind of pattern, but basically to make derivatives of a particular class without duplicating a lot of code, we inherit that class, override important methods and add some code, and then call the base method at some point.  This has a kind of cascade effect; in the Pistol class' `Update()` method, we call the Gun class' `Update()`, which calls its own `base.Update()`, etc, etc.
 
-&nbsp;
 This is especially useful in creating objects for games because we often have a lot of similar base behaviour, but want to **add** extra things to it.  You can see this in action through the rest of the Duck Game items: Pistol inherits Gun which inherits Holdable which inherits PhysicsObject which inherits ....
 
-&nbsp;
 With that in mind, we can begin making our rocket pistol;
 
 ```cs
@@ -125,7 +120,6 @@ namespace DuckGame.ExampleMod {
 
 As you can see, we only really need to change the ammo type and the base constructor will handle the rest.  Figuring out how and which ammo type to switch to was relatively straightforward because the ammo types are labeled quite clearly -- this isn't always the case, and you might need to do some digging to find out what to do to get what you want working.
 
-&nbsp;
 At this point I'd recommend making a custom map using the game's level editor and placing a spawner with your item.  As per the `EditorGroup` code above, it can be found under ExampleMod -> guns -> Rocket Pistol.
 
 ![Rocket pistol in level editor](/assets/2018_rocket_pistol_in_menu.png)
@@ -136,7 +130,6 @@ At this point I'd recommend making a custom map using the game's level editor an
 
 Lets add something else.  What if we wanted to make it so that the weapon gets dropped every time we shoot?  Here's where some intuition comes in, and getting to know the codebase will help.  Knocking items out of people's hands is a fairly common action in Duck Game, so you can bet there's a method in place already for it.  The most logical place for this method would be on the Duck object -- indeed, `Disarm()` exists.  The next thing we need is a reference to the Duck object so that we can actually call this method.  A logical place for this might be on the item -- indeed, `owner` exists.
 
-&nbsp;
 Once we've figured out what method we want to use, it's relatively easy to find out how to use it.  Right click on the method in your decompiler and click "Find Usages".  This will show you all the usages of the method in the Duck Game source, and is your number one guide in figuring out how to use something.
 
 ![dotPeek find usages](/assets/2018_dotpeek_find_usages.gif)
@@ -204,7 +197,6 @@ namespace DuckGame.DevelopmentMod {
 
 Most of this should be relatively straightforward by now.  For reference, to figure out which variables to change I simply looked at the pistol class (listed above) and applied some common sense and trial / error.
 
-&nbsp;
 There are a few points here that would benefit from an explanation however, namely the collision information.  A picture is worth a thousand words, so here's a diagram:
 
 ![Rocket pistol sprite diagram](/assets/2018_dg_sprite_diagram.png)
@@ -212,7 +204,6 @@ There are a few points here that would benefit from an explanation however, name
 
 The first point to understand here are first of all that 0, 0 is placed at the top left of the sprite.  The second point is that the collision offset and collision size are *relative* values; collision offset is relative to the center point, and collision size is relative to the collision offset.
 
-&nbsp;
 With that sorted, let's move on to something more fun: **animations**.  Animations in duck game are mainly delivered in the form of sprite sheets.  You're probably familiar with these if you've done any kind of game development before.  Here's one I made for our rocket pistol:
 
 ![Rocket pistol frames](/assets/2018_rocket_pistol_frames.png)
@@ -245,7 +236,6 @@ public RocketPistol(float xval, float yval) : base(xval, yval) {
 
 The `AddAnimation()` function takes 4 parameters: the name of the animation, the speed of each frame, whether the animation loops or not, and then the actual animation frames.  I'm not sure exactly what the speed parameter represents, but lower values will make the animation slower, and higher values faster.  You can also repeat frames if you need part of an animation to last a little longer -- the default pistol does this with its "fire" animation.<br>To play an animation, we simply call `SetAnimation()` with the animation's name.
 
-&nbsp;
 To get our animations to play at the correct time, I've copied some of the code from the base pistol class' `OnPressAction()` function into our own.  This lets us have a bit more control over when we can set animations and under what circumstance.  I've also added the smoke you see when you fire the regular rocket launcher, removed the pistol sparks, and made some of our logic make a bit more sense:
 
 ```cs
@@ -299,13 +289,11 @@ To upload your mod to the steam workshop, I recommend reading the section titled
 
 There's not a lot of information out there on making your mod work online.
 
-&nbsp;
 The first thing you should know is that Duck Game doesn't use your typical client-server architecture.  There is a main host that handles level transitions and things like that, but each duck / computer effectively acts as its own server for objects that it thinks it owns.  Examples of these might be items that you've picked up (weapons, boxes, etc), or things you've interacted with (doors, mostly).  The main thing to realise here is that all clients work together to send and receive information and synchronise their version of the scene.  Each duck is responsible for synchronising the things that they own, and your mod is responsible for specifying exactly how that happens.
 
 ## State Bindings
 Variables that have state bindings attached to them will have their values sent from the object owner to the other clients.  You should use these to keep important variables synchronised across clients.
 
-&nbsp;
 An example of state bindings being used in the official game is for grenades;
 
 ```cs
@@ -331,18 +319,15 @@ public class Grenade : Gun {
 
 }
 ```
-> Note that this code has been simplified.
+> Note that this code has been simplified, the real decompiled code is much  more complex.
 
 There are two statebindings here, one for the pin, and one for the timer.  Synchronising the pin means that each client knows when to start their timer, and synchronising the timer means that the grenade should explode at the same time on each client, even if someone lags and gets the pin message late.  Really, the game would probably work fine most of the time with just one of these, but both are used to cover a few edge cases and make everything a bit smoother.
 
-&nbsp;
 It's not necessary to synchronise everything.  Try to reason about what your mod *needs* to run properly, and what will *help* it run better.  This is how almost all efficient networking works.  If you were making a sticky grenade, it probably doesn't make sense to update the grenade's position over each network frame to make it follow a player.  Instead, you could send the player it was stuck to just once, and update the position locally.
 
 &nbsp;
-&nbsp;
 There's a degree of authority involved with state bindings.  You can't really change a binded variable of an object you don't own; if you do, the owner will sooner or later tell you what the real value of that variable is and override your changes.  This doesn't mean that you should rely on network variables; good networking runs locally and keeps itself synchronised as often as possible.
 
-&nbsp;
 On the PC release, state bindings are generally synchronised as soon as possible upon being changed.
 
 ## Fondle()
@@ -380,7 +365,6 @@ if (!this._fucked && (double) this._hitPoints < (double) this._maxHealth / 2.0) 
 ## Level.Add() and isServerForObject
 When you need to add something to a level, be it a feather, box, bullet, or otherwise, chances are you'll be using `Level.Add()` in some form or another.
 
-&nbsp;
 When a client who is the object owner calls `Level.Add()`, it adds the object to the level and marks its entirety to be sent to each client.  When a client who isn't the object owner calls `Level.Add()`, it only adds the object to the level.  For this reasoning, it is important that you **only** call `Level.Add()` for the object's owner; if you don't, chances are two copies will be spawned -- one local (spawned by you) and one remote (spawned by the owner).
 
 ```cs
