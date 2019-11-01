@@ -291,7 +291,7 @@ public class SaveManager {
 `item` (scriptable object reference) fields change between editor restarts and builds, so your save file won't work between editor sessions, and wont transfer from editor to build.  Item references *should* survive between builds, provided that you don't change or remove objects used in the save.
 
 > **NB:** If you want to guarantee that saves persist between builds, you can store scriptable object names (or IDs) rather than references, and then make use of `Resources.Load()` to load them.  I'll probably cover this in a later blog post--this one is long enough as it is.
-> *Edit: this post is now available [here](https://toqoz.svbtle.com/an-object-database-pattern-for-unity3d).*
+> *Edit: this post is now available [here](http://toqoz.fyi/unity-object-database.html).*
 
 We now have a workable inventory backend.  To recap, our backend involves:
 - **Item classes (as scriptable objects).**<br>
