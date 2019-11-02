@@ -17,12 +17,14 @@ There's a lot of ifs and buts here, which is a pain in the ass if you just want 
 
 ---
 
-# [`DrawMeshInstanced`](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstanced.html)
-You can use `Graphics.DrawMeshInstanced` to get around a lot of these conditions.  This will draw a number of meshes (up to 1023 in a single batch) for a single frame.
+# [`DrawMeshInstanced()`](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstanced.html)
+You can use `Graphics.DrawMeshInstanced()` to get around a lot of these conditions.  This will draw a number of meshes (up to 1023 in a single batch) for a single frame.
 
 This is a particularly nice solution for when you want to draw a lot of objects that don't move very much, or only move in the shader (trees, grass).  It allows you to easily shove meshes to the GPU, customize them with `MaterialPropertyBlock`s, and avoid the fat overhead of `GameObject`s.  Additionally, Unity has to do a little less work to figure out if it can instance the objects or not, and will throw an error rather than silently nerfing performance.  The main downside here is that moving these objects usually results in a huge `for` loop, which kills performance.
 
-> If you *must* move meshes while using `DrawMeshInstanced`, consider using a sleep/wake model to reduce the size of these loops as much as possible.
+![Instancing error](/assets/2019_gpu_instancing_error.png)
+
+> If you *must* move meshes while using `DrawMeshInstanced()`, consider using a sleep/wake model to reduce the size of these loops as much as possible.
 
 ### Example
 ```cs
@@ -82,7 +84,7 @@ public class DrawMeshInstancedDemo : MonoBehaviour {
 }
 ```
 
-Essentially, we fill a big array with matrices representing object transforms (position, rotation, scale) and then pass that array to `Graphics.DrawMeshInstanced`, which will assign those matrices in the shader automagically (assuming the shader supports instancing).
+Essentially, we fill a big array with matrices representing object transforms (position, rotation, scale) and then pass that array to `Graphics.DrawMeshInstanced()`, which will assign those matrices in the shader automagically (assuming the shader supports instancing).
 
 You can still grab the instanceID to do per-mesh customizations via `MaterialPropertyBlock`s (see color array), but you'll probably need to use a custom shader:
 
@@ -152,13 +154,13 @@ Shader "Custom/InstancedColor" {
 > If setting up a random array in the shader feels awkward, that's because it is.  There doesn't seem to be a way to get Unity to set up an array for you and index the color automatically.  If we were using individual game objects, we could do something like [this](https://docs.unity3d.com/540/Documentation/Manual/GPUInstancing.html).  You could probably get this to work by digging into the shader source and having a look at what names Unity uses for the arrays, but that's pretty convoluted for no good reason.
 
 
-# [`DrawMeshInstancedIndirect`](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html)
-`DrawMeshInstanced` turns out to be a sort of wrapper around `DrawMeshInstancedIndirect`.  You can achieve everything in the latter that you can with the former (and vice versa, with complications).  `DrawMeshInstanced` is mainly a friendly way to draw meshes without touching the GPU.
+# [`DrawMeshInstancedIndirect()`](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html)
+`DrawMeshInstanced()` turns out to be a sort of wrapper around `DrawMeshInstancedIndirect()`.  You can achieve everything in the latter that you can with the former (and vice versa, with complications).  `DrawMeshInstanced()` is mainly a friendly way to draw meshes without touching the GPU.
 
-Naturally, some nice things get lost in the abstraction.  First of all, the `Indirect` variant allows you to bypass the 1023 mesh limit and draw as many meshes as you like in a single batch (the 1023 mesh limit seems to actually inherited from [`MaterialPropertyBlock`](https://docs.unity3d.com/ScriptReference/MaterialPropertyBlock.CopyProbeOcclusionArrayFrom.html)).  The primary benefit, however, is that you can offload the entirety of the work onto the GPU.  With `DrawMeshInstanced`, Unity has to upload the array of mesh matrices to the GPU each frame, whereas `Indirect` creates and stores data on the GPU indefinitely.  This also means using GPU-based structures to store data, mainly [`ComputeBuffer`s](https://docs.unity3d.com/ScriptReference/ComputeBuffer.html), which can be scary up front but is actually more convenient and opens the door to some easy mass parallelisation via compute shaders.
+Naturally, some nice things get lost in the abstraction.  First of all, the `Indirect` variant allows you to bypass the 1023 mesh limit and draw as many meshes as you like in a single batch (the 1023 mesh limit seems to actually inherited from [`MaterialPropertyBlock`](https://docs.unity3d.com/ScriptReference/MaterialPropertyBlock.CopyProbeOcclusionArrayFrom.html)).  The primary benefit, however, is that you can offload the entirety of the work onto the GPU.  With `DrawMeshInstanced()`, Unity has to upload the array of mesh matrices to the GPU each frame, whereas `DrawMeshInstancedIndirect()` creates and stores data on the GPU indefinitely.  This also means using GPU-based structures to store data, mainly [`ComputeBuffer`s](https://docs.unity3d.com/ScriptReference/ComputeBuffer.html), which can be scary up front but turns out to be more convenient, and opens the door to some easy mass parallelisation via compute shaders.
 
 ### Example
-Here's the same program as above but using `DrawMeshInstancedIndirect` instead:
+Here's the same program as above but using `DrawMeshInstancedIndirect()` instead:
 ```cs
 public class DrawMeshInstancedIndirectDemo : MonoBehaviour {
     public int population;
@@ -252,7 +254,7 @@ public class DrawMeshInstancedIndirectDemo : MonoBehaviour {
     }
 }
 ```
-> The `bounds` parameter of `DrawMeshInstancedIndirect` is used for determining whether the mesh is in view and culling it.  The documentation states  `Meshes are not further culled by the view frustum or baked occluders ...` which gave me the impression that culling was simply disabled for all meshes drawn with DrawMeshInstanced/Indirect, but this is not so.  Unity will cull all the instanced meshes if the provided mesh bounds are not in view.  It will not, however, cull individual instanced meshes -- you'll have to calculate this yourself if you find it necessary.
+> The `bounds` parameter of `DrawMeshInstancedIndirect()` is used for determining whether the mesh is in view and culling it.  The documentation states  `Meshes are not further culled by the view frustum or baked occluders ...` which gave me the impression that culling was simply disabled for all meshes drawn with DrawMeshInstanced/Indirect, but this is not so.  Unity will cull all the instanced meshes if the provided mesh bounds are not in view.  It will not, however, cull individual instanced meshes -- you'll have to calculate this yourself if you find it necessary.
 
 And the associated shader:
 ```c
@@ -308,8 +310,8 @@ Shader "Custom/InstancedIndirectColor" {
 ![1022 meshes using DrawMeshInstancedIndirect](/assets/2019_1022_indirect_colored.png)
 *1022 meshes drawn with `DrawMeshInstancedIndirect`*
 
-A key difference here is that with `DrawMeshInstanced`, we were giving Unity an array of matrices and having it automagically figure out vertex positions before we got to the shader.  Here, we're being much more direct in that we're pushing the matrices to the GPU and applying the transformation ourselves.  The shader instancing code has been cut down significantly, which is nice, and we've gained about a millisecond in rendering.
-Note, however, that this number is heavily influenced by the rest of the game.  In our basic scene with nothing happening, bandwidth and CPU time is abundant, so the benefits of `Indirect` are less prevalent than in the real world.
+A key difference here is that with `DrawMeshInstanced()`, we were giving Unity an array of matrices and having it automagically figure out vertex positions before we got to the shader.  Here, we're being much more direct in that we're pushing the matrices to the GPU and applying the transformation ourselves.  The shader instancing code has been cut down significantly, which is nice, and we've gained about a millisecond in rendering.
+Note, however, that this number is heavily influenced by the rest of the game.  In our basic scene with nothing happening, bandwidth and CPU time is abundant, so the benefits of `DrawMeshInstancedIndirect()` are likely less prevalent than in the real world.
 
 The 1023 mesh limit has also disappeared.  Pushing the population up to even 100, 000 has little affect on my system (Ryzen 1700, 1080Ti):
 
@@ -319,7 +321,7 @@ The 1023 mesh limit has also disappeared.  Pushing the population up to even 100
 ---
 
 # Adding movement with a compute shader
-Now that we're using `DrawMeshInstancedIndirect`, we can add some mesh movement without crushing performance.
+Now that we're using `DrawMeshInstancedIndirect()`, we can add some mesh movement without crushing performance.
 
 [Compute Shaders](https://docs.unity3d.com/Manual/class-ComputeShader.html) are special programs that run on the GPU and allow you to utilize the massive parallel power of graphics devices for non-graphics code.  I'm mostly looking to demonstrate how you can use a compute shader with the other tools shown so far, so I won't explain compute shaders too in-depth; [here](http://kylehalladay.com/blog/tutorial/2014/06/27/Compute-Shaders-Are-Nifty.html) is a good blog post talking about them, which covers everything better than I could.
 
@@ -416,3 +418,5 @@ public class DrawMeshInstancedIndirectDemo : MonoBehaviour {
 ![Pushing a lot of meshes around](/assets/2019_compute_movement.gif)
 
 And that's all, really.  Now you know how to move and draw (hundreds of) thousands of meshes efficiently.
+
+> Source code and Unity project available at [https://github.com/Toqozz/blog-code/tree/master/mesh_batching](https://github.com/Toqozz/blog-code/tree/master/mesh_batching).
