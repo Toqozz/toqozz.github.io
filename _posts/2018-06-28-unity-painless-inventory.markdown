@@ -1,11 +1,9 @@
 ---
 layout: post
-title: "Making a painless inventory system with scriptable objects in Unity"
+title: "Making a Painless Inventory System with Scriptable Objects in Unity"
 date: 2018-06-28
 categories:
 ---
-
-# Making a painless inventory system with scriptable objects in Unity
 Something that might surprise you is that there is actually a lack of content on making easy to use inventory systems in Unity.
 
 When I say easy to use, I mean:
@@ -14,7 +12,7 @@ When I say easy to use, I mean:
 - Resource efficient.
 - Integrates with the Unity UI.
 
-And I think that these points are quite significant, particularly the first, because it ties everything else together.  The majority of material I found online  ^[1](https://unity3d.com/learn/tutorials/projects/adventure-game-tutorial/inventory) ^[2](https://github.com/nzhul/inventory-system) ^[3](https://www.reddit.com/r/Unity3D/comments/6yt3e5/anybody_have_any_tips_on_a_scriptable_object/) ^[4...](https://answers.unity.com/questions/1260736/scriptable-objects-as-inventory-items-unable-to-sa.html) really doesn't explain much more than some tips on getting started, or misses these marks.  So my goal here is to try and collate the information and experience I gathered when writing our inventory system.
+And I think that these points are quite significant, particularly the first, because it ties everything else together.  The majority of material I found online[<sup>1</sup>](https://unity3d.com/learn/tutorials/projects/adventure-game-tutorial/inventory) [<sup>2</sup>](https://github.com/nzhul/inventory-system) [<sup>3</sup>](https://www.reddit.com/r/Unity3D/comments/6yt3e5/anybody_have_any_tips_on_a_scriptable_object/) [<sup>4...</sup>](https://answers.unity.com/questions/1260736/scriptable-objects-as-inventory-items-unable-to-sa.html) really doesn't explain much more than some tips on getting started, or misses these marks.  So my goal here is to try and collate the information and experience I gathered when writing our inventory system.
 
 # Why Scriptable Objects?
 Don't be alarmed if you haven't even heard of scriptable objects in Unity until now.  These things are severely underrepresented in the Unity documentation and examples.  Consequently, they seem to have a kind of air around them that suggests they're complicated and difficult to understand, when the opposite is true.  If you know what `MonoBehaviour` is, I'm sure `ScriptableObject` will be no stretch.

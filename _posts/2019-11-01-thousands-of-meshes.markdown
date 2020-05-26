@@ -1,13 +1,11 @@
 ---
 layout: post
-title: "Drawing thousands of meshes with DrawMeshInstanced/Indirect in Unity"
+title: "Drawing Thousands of Meshes with DrawMeshInstanced / Indirect in Unity"
 date: 2019-11-01
 categories:
 ---
 
-# Drawing (hundreds of) thousands of meshes in Unity
 ![Demo gif](/assets/2019_mesh_spiral.gif)
-
 GPU instancing is a graphics technique available in Unity to draw lots of the same mesh and material quickly.
 
 In the right circumstances, GPU instancing can allow you to feasibly draw even millions of meshes.  Unity tries to make this work automatically for you if it can.  If all your meshes use the same material, 'GPU Instancing' is ticked, your shader supports instancing, lighting and shadows play nicely, you're not using a skinned mesh renderer, etc, Unity will automatically batch meshes into a single draw call.
@@ -20,9 +18,7 @@ There's a lot of ifs and buts here, which is a pain in the ass if you just want 
 # [`DrawMeshInstanced()`](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstanced.html)
 You can use `Graphics.DrawMeshInstanced()` to get around a lot of these conditions.  This will draw a number of meshes (up to 1023 in a single batch) for a single frame.
 
-This is a particularly nice solution for when you want to draw a lot of objects that don't move very much, or only move in the shader (trees, grass).  It allows you to easily shove meshes to the GPU, customize them with `MaterialPropertyBlock`s, and avoid the fat overhead of `GameObject`s.  Additionally, Unity has to do a little less work to figure out if it can instance the objects or not, and will throw an error rather than silently nerfing performance.  The main downside here is that moving these objects usually results in a huge `for` loop, which kills performance.
-
-![Instancing error](/assets/2019_gpu_instancing_error.png)
+This is a particularly nice solution for when you want to draw a lot of objects that don't move very much, or only move in the shader (trees, grass).  It allows you to easily shove meshes to the GPU, customize them with `MaterialPropertyBlock`s, and avoid the fat overhead of `GameObject`s.  Additionally, Unity has to do a little less work to figure out if it can instance the objects or not, and will throw an error rather than silently nerfing performance.  The main downside here though is that moving these objects usually results in a huge `for` loop, which kills performance.
 
 > If you *must* move meshes while using `DrawMeshInstanced()`, consider using a sleep/wake model to reduce the size of these loops as much as possible.
 
@@ -88,7 +84,7 @@ Essentially, we fill a big array with matrices representing object transforms (p
 
 You can still grab the instanceID to do per-mesh customizations via `MaterialPropertyBlock`s (see color array), but you'll probably need to use a custom shader:
 
-> *A custom shader is only required if you're customizing per-mesh properties;*
+> *A custom shader is only required if you're customizing per-mesh properties.*
 
 ```c
 Shader "Custom/InstancedColor" {

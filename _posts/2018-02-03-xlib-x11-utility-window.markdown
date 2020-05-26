@@ -1,11 +1,10 @@
 ---
 layout: post
-title: "Creating a utility window using properties in Xlib/X11"
+title: "Creating a Utility Window Using Properties in Xlib/X11"
 date: 2018-02-03
 categories:
 ---
 
-# Creating a utility window using properties in Xlib/X11
 [Yarn](https://github.com/Toqozz/yarn) is a notification daemon designed to be a more visually featureful alternative to the beloved [dunst](https://github.com/dunst-project/dunst).  It was important to me that Yarn be at least as lightweight as dunst, which meant avoiding GTK/Qt and drawing with Xlib/Cairo instead.
 
 The main thing this meant was that I had to interface with X11 directly.  I wanted a pure X11 utility window -- no window manager positioning, no window borders, just compositor shadows.
@@ -111,11 +110,4 @@ To my understanding, properties starting with "`_NET`" are part of the newer XDG
 Freedesktop has a list of the available (newer) properties [here](https://specifications.freedesktop.org/wm-spec/1.3/ar01s05.html), whereas the older properties can be found [here](https://tronche.com/gui/x/xlib/ICC/).
 
 You can also use the `xprop` utility to see the properties of existing windows you're using.  This can be helpful in making complicated windows "just-so" and really understanding properties.  Under most distributions, `xprop` is available as the `xorg-xprop` package.
-
 ![Getting window properties with xprop](/assets/2018_xprop.png)
-
----
-
-Hopefully from here you'll have all you need to explore this field on your own, and correctly propertize your windows.
-
-

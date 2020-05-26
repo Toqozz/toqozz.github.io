@@ -1,11 +1,9 @@
 ---
 layout: post
-title: "An object database pattern for Unity3D"
+title: "An Object Database Pattern for Unity3D"
 date: 2018-08-30
 categories:
 ---
-
-# An object database pattern for Unity3D
 Assigning object references through the Unity inspector is a great tool.  Unfortunately though, it tends to really get in the way of doing code-based object instantiation; in particular, there's no clean Unity-endorsed solution to making simple static classes which utilize game objects.
 
 When I really need to solve this problem, I've been using a scriptable object database type solution.  I'll tie this post into my [inventory post](https://toqoz.svbtle.com/a-unity-inventory-system-that-actually-works), where we needed a simple and tangle-free way to associate item names with game objects, because raw jsonified object references would change between builds.

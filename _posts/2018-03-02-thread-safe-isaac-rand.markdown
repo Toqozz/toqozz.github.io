@@ -1,12 +1,10 @@
 ---
 layout: post
-title: "A thread safe ISAAC-rand"
+title: "A Thread Safe ISAAC-rand"
 date: 2018-03-02
 categories:
 ---
-
-# A thread safe ISAAC-rand
-ISAAC-rand is not thread safe because it uses a global context to keep track of the random state, meaning that when the context is seeded in a threaded environment, its state is likely to be clobbered by another thread.  A lockless solution to this issue can be achieved with a few relatively simple changes.
+[ISAAC-rand](https://www.burtleburtle.net/bob/rand/isaacafa.html) is not thread safe because it uses a global context to keep track of the random state, meaning that when the context is seeded in a threaded environment, its state is likely to be clobbered by another thread.  A lockless solution to this issue can be achieved with a few relatively simple changes.
 
 Looking into ISAAC's source code (`ISAAC-rand.c`), we notice that the random context is actually scoped quite locally, shared only between `seed_random` and `random_num`:
 

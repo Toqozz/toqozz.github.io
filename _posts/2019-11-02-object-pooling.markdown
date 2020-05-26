@@ -1,13 +1,11 @@
 ---
 layout: post
-title: "Object pooling in Unity"
+title: "Object Pooling in Unity"
 date: 2019-11-02
 categories:
 ---
 
-# Object pooling in Unity
 ![Demo gif](/assets/2019_projectile_spam.gif)
-
 [`Instantiate()`](https://docs.unity3d.com/ScriptReference/Object.Instantiate.html) is expensive.  If possible, you should never use it at runtime.  For one-offs this is usually done by spawning whatever objects you need in `Awake()`, and then calling `SetActive(true)` when you need them.  For more than one-offs, you probably want to use a pool.
 A pool is a group of objects that you instantiate at some convenient time (probably on scene load), and then later on, when you want to spawn an object, you grab it from the pool instead of making it fresh.  This technique is used extensively throughout just about any well-programmed game.
 

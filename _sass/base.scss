@@ -7,19 +7,19 @@
  */
 //$base-font-family:     'Source Code Pro', monospace !default;
 $base-font-family:     'Arial', sans-serif !default;
-$base-font-size:       16px !default;
+$base-font-size:       14px !default;
 $code-font-size:       13px !default;
 $mobile-font-size:     12px !default;
 $base-line-height:     1.5 !default;
 $container-width:      90% !default;
-$container-max-width:  700px !default;
+$container-max-width:  800px !default;
 
 /**
  * Global
  */
 body { background-color: $background-color;  margin: 0 auto;  padding: 0;  font-family: $base-font-family;  font-size: $base-font-size;  color: $text-color;  text-align: left;  line-height: $base-line-height !important; }
-h1, h2, h3, h4, h5, h6 { margin: 22px 0px -15px 0px; font-weight: bold;  color: $text-color; }
-ul, ol { margin: 0px;  color: $text-color; }
+h1, h2, h3, h4, h5, h6 { margin: 22px 0px -15px 0px; font-weight: bold;  color: $heading-color; }
+ul, ol { margin-left: 10px;  color: $text-color; }
 a { text-decoration: underline $text-underline-color;  color: $link-color; }
 a:hover { color: $background-color; background-color: $base-color; }
 .primary-text { color: $primary-color; }
@@ -52,7 +52,7 @@ footer { margin-bottom: 20px; }
  */
 :not(.menu) > ul { list-style: none;  padding-left: 0; }
 :not(.menu) > ul { list-style-type: none; }
-:not(.menu) > ul > li:before { content: "-";  margin-right: 9px; }
+:not(.menu) > ul > li:before { content: "∙";  margin-right: 7px; }
 table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -69,7 +69,7 @@ td, th {
 /**
  * Header/Navigation
  */
-.menu { border-top: $border;  border-bottom: $border;  margin-bottom: 25px; }
+.menu { border-bottom: $border;  margin-bottom: 25px; }
 .menu ul { margin-top: 12px;  margin-bottom: 12px;  padding-left: 0px;  list-style-type: none;  text-align: right; }
 .menu ul li { display: inline;  margin-left: 10px; }
 .menu ul li a { text-decoration: none;  color: $text-color; }
@@ -94,7 +94,7 @@ textarea { vertical-align: top; }
  */
 img {
     position: relative;
-    max-width: 120%;
+    max-width: 100%;
     height: auto;
     left: 50%;
     transform: translate(-50%);

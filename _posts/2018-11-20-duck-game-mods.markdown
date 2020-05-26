@@ -1,17 +1,14 @@
 ---
 layout: post
-title: "Everything you need to know about writing mods for Duck Game"
+title: "Everything You Need to Know About Modding Duck Game"
 date: 2018-11-20
 categories:
 ---
 
-# Everything you need to know about writing mods for Duck Game
-
+![duck-game-cover.jpg](/assets/2018_duck_game_title.jpg)
 So you want to make some mods for Duck Game?  Look no further.  This guide should tell you almost everything you need to know about making a good mod that actually functions.  We'll talk about getting set up, explain some of Duck Game's core mod structure, talk about networking, and hopefully most of the other little details you might need.
 
-![duck-game-cover.jpg](/assets/2018_duck_game_title.jpg)
-
-# Is making mods difficult?  Can I write mods even if I don't have much experience?
+# Is making mods difficult?
 Mods for Duck Game can definitely be made with only a basic understanding of programming.  Whether those mods are spaghetti or not might be a different story, but making basic mods in Duck Game is relatively easy.
 
 Skills that may help significantly: knowledge of basic object oriented programming, basic C# knowledge, a bit of intuition in reading other people's code, and most of all, **time**.  You might have heard elsewhere that writing mods for Duck Game is very fiddly, and that's because it is.  A lot (most?) of your time will be spent reading through the Duck Game source code to try and figure out how the developer has achieved a similar effect to something you're trying to make, and then deciphering *why* exactly it has been done in that way.  If you don't have much in the way of these skills just yet, making mods can be a great learning experience.
@@ -123,7 +120,6 @@ As you can see, we only really need to change the ammo type and the base constru
 At this point I'd recommend making a custom map using the game's level editor and placing a spawner with your item.  As per the `EditorGroup` code above, it can be found under ExampleMod -> guns -> Rocket Pistol.
 
 ![Rocket pistol in level editor](/assets/2018_rocket_pistol_in_menu.png)
-
 ![Rocket pistol in action](/assets/2018_rocket_pistol_in_action.gif)
 
 ## More functionality
@@ -131,7 +127,6 @@ At this point I'd recommend making a custom map using the game's level editor an
 Lets add something else.  What if we wanted to make it so that the weapon gets dropped every time we shoot?  Here's where some intuition comes in, and getting to know the codebase will help.  Knocking items out of people's hands is a fairly common action in Duck Game, so you can bet there's a method in place already for it.  The most logical place for this method would be on the Duck object -- indeed, `Disarm()` exists.  The next thing we need is a reference to the Duck object so that we can actually call this method.  A logical place for this might be on the item -- indeed, `owner` exists.
 
 Once we've figured out what method we want to use, it's relatively easy to find out how to use it.  Right click on the method in your decompiler and click "Find Usages".  This will show you all the usages of the method in the Duck Game source, and is your number one guide in figuring out how to use something.
-
 ![dotPeek find usages](/assets/2018_dotpeek_find_usages.gif)
 
 ```cs
@@ -274,7 +269,6 @@ public override void OnPressAction() {
 Copying code from the base class into your custom one is something you'll find yourself doing often in order to have more control over what the item does -- intricate mods can quickly become very tricky because of this.
 
 ![Rocket Pistol with custom sprites and animations](/assets/2018_rocket_pistol_sprites_and_animations.gif)
-
 I now realise that most of the reload animation gets lost in the smoke -- but it's a nice detail nonetheless.
 
 ---
@@ -396,15 +390,14 @@ public void Scream() {
 }
 ```
 
-# Useful other resources:
+---
+
+# Notes / extra thought dump stuff
+Resources that helped me:
 - https://steamcommunity.com/sharedfiles/filedetails/?id=484818341
 - https://steamcommunity.com/sharedfiles/filedetails/?id=595956552
 - https://steamcommunity.com/app/312530/discussions/3/458604254441171969/
 - https://steamcommunity.com/app/312530/discussions/3/541906989409705452/
-
----
-
-# Notes / extra thought dump stuff
 
 ### spinning
 Setting `gravMultiplier` to a value of 0 or less, or `weight` to a value of 5 or more, will stop an item from spinning in the air.  Only classes inheriting from `Gun` spin.

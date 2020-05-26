@@ -1,14 +1,11 @@
 ---
 layout: post
-title: "Finding sprite UV/texture coordinates in Unity"
+title: "Finding Sprite UV/Texture Coordinates in Unity"
 date: 2019-07-02
 categories:
 ---
 
-# Finding sprite UV/texture coordinates in Unity
-
 ![Eyedrop demo.](/assets/2019_eyedropper.png)
-
 If you want to do any kind of texture manipulation in games, you'll need some form of texture coordinates.  If you're in 3D, you can obtain UV coordinates of a particular point on a mesh via [raycasting](https://docs.unity3d.com/ScriptReference/RaycastHit.html), but there's no easy way to achieve the same thing for sprite renders.
 
 Luckily, we can calculate these coordinates ourselves.

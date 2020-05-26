@@ -1,13 +1,10 @@
 ---
 layout: post
-title: "Calculating distance per 360 sensitivity in Unity3D"
+title: "Calculating Distance Per 360 Sensitivity in Unity3D"
 date: 2018-02-23
 categories:
 ---
-
-# Calculating distance per 360 sensitivity in Unity3D
-Physical mouse distance to camera view movement can be an important attribute in some projects.  
-For particular games (primarly aim training games like [Kovaak's](https://store.steampowered.com/app/824270/KovaaKs_FPS_Aim_Trainer/)), it is important to be able to measure the physical mouse distance in relation to the camera.  Most commonly, this calculation is reffered to as the inches/cm per 360 sensitivity, and can be a useful metric in unfying look sensitivity between games.  There exist entire [sites](http://mouse-sensitivity.com/) dedicated to making this conversion.
+Physical mouse distance to camera view movement can be an important attribute in some projects.  For particular games (primarly aim training games like [Kovaak's](https://store.steampowered.com/app/824270/KovaaKs_FPS_Aim_Trainer/)), it is important to be able to measure the physical mouse distance in relation to the camera.  Most commonly, this calculation is refered to as the inches/cm per 360 sensitivity, and can be a useful metric in unfying look sensitivity between games.  There exist entire [sites](http://mouse-sensitivity.com/) dedicated to making this conversion.
 
 The scripts in this post will be Unity-specific, however the process should be able to be easily applied to any engine.
 

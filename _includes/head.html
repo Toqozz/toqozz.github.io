@@ -5,11 +5,7 @@
   <title>{{ page.title }}</title>
   {%- seo -%}
 
-  {%- if site.style == 'light' -%}
-    <link rel="stylesheet" type="text/css" href="{{ "/assets/main-light.css" | relative_url }}">
-  {%- else -%}
-    <link rel="stylesheet" type="text/css" href="{{ "/assets/main-dark.css" | relative_url }}">
-  {%- endif -%}
+  <link rel="stylesheet" type="text/css" href="{{ "/assets/main-dark.css" | relative_url }}">
 
   {%- if jekyll.environment == 'production' and site.google_analytics -%}
     {%- include google-analytics.html -%}
