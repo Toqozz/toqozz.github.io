@@ -273,10 +273,10 @@ The results are in!
 
 Spawning 5,000 projectiles was enough to make us drop a couple of frames even with our object pool.  With `Instantiate()`, it's closer to a freeze.  When spawning lots of objects in one place, you probably *always* want to split the operation over multiple frames, regardless of how optimized your architecture is.  Even a small amount of stutter in games is horrible and really goes against "game feel" -- even if players can't point out why, they'll feel uncomfortable playing your game.
 
-If you're thinking: "Why would I ever want to spawn thousands of objects at once?  `Instantiate()` is good enough.", I have a few things to say:
-First of all, you might not spawn that many objects from any *one place* at the same time, but as your game gets bigger you can end up spawning a significant number of objects at the same time either by coincidence, or because an in-game event triggers a bunch of things at once; e.g. AI enemies shooting at a player.
-Secondly, the objects I've used in this benchmark are pretty much as simple as they come -- only a few (basic) components and no children.  Add a couple `Rigidbody`s, character animations, and child objects, and the number of things you can spawn without players feeling anything drops **hard**.
-Lastly, keep in mind that PC (where this benchmark was run) is probably the fastest platform you'll be running your game on.  Spawning even a couple of fat objects on mobile can be enough to cause a stutter.
+If you're thinking: "Why would I ever want to spawn thousands of objects at once?  `Instantiate()` is good enough.", here's some things to consider:
+- You might not spawn that many objects from any *one place* at the same time, but as your game gets bigger you can end up spawning a significant number of objects at the same time either by coincidence, or because an in-game event triggers a bunch of things at once; e.g. AI enemies shooting at a player.
+- The objects I've used in this benchmark are pretty much as simple as they come -- only a few (basic) components and no children.  Add a couple `Rigidbody`s, character animations, and child objects, and the number of things you can spawn without players feeling anything drops **hard**.
+- PC (where this benchmark was run) is probably the fastest platform you'll be running your game on.  Spawning even a couple of fat objects on mobile can be enough to cause a stutter.
 
 An object pool significantly increases your headroom for spawning lots of objects at runtime, and is almost as convenient as instantiation.  If you're calling `Instantiate()`, chances are that it can be replaced with an object pool.
 
