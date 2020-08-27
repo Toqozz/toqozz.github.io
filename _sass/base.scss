@@ -18,8 +18,8 @@ $container-max-width:  800px !default;
  * Global
  */
 body { background-color: $background-color;  margin: 0 auto;  padding: 0;  font-family: $base-font-family;  font-size: $base-font-size;  color: $text-color;  text-align: left;  line-height: $base-line-height !important; }
-h1, h2, h3, h4, h5, h6 { margin: 22px 0px -15px 0px; font-weight: bold;  color: $heading-color; }
-ul, ol { margin-left: 10px;  color: $text-color; }
+h1, h2, h3, h4, h5, h6 { margin: 22px 0px -5px 0px; font-weight: bold;  color: $heading-color; }
+ul, ol { margin-left: 10px; color: $text-color; }
 a { text-decoration: underline $text-underline-color;  color: $link-color; }
 a:hover { color: $background-color; background-color: $base-color; }
 .primary-text { color: $primary-color; }
@@ -52,7 +52,8 @@ footer { margin-bottom: 20px; }
  */
 :not(.menu) > ul { list-style: none;  padding-left: 0; }
 :not(.menu) > ul { list-style-type: none; }
-:not(.menu) > ul > li:before { content: "∙";  margin-right: 7px; }
+/*:not(.menu) > ul > li:before { content: "∙";  margin-right: 7px; }*/
+:not(.menu) > ul > li:before { content: "•";  margin-right: 7px; }
 table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -121,7 +122,7 @@ hr {
 
 blockquote {
     border-left: 2px solid $line-color;
-    margin: 10px;
+    margin: 5px 0px 5px 0px;
     padding: 1px 15px;
     background: $background-color-hard
 }

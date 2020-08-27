@@ -11,7 +11,7 @@ A pool is a group of objects that you instantiate at some convenient time (proba
 
 > A good rule is to never call `Instantiate()` when the player has control.
 
-# A dead simple pool
+## A Dead Simple Pool
 Here's a simple, performant pool you can use:
 
 ```cs
@@ -129,7 +129,7 @@ public class PooledObject : MonoBehaviour {
 }
 ```
 
-## Usage
+### Usage
 Usage is as straightforward as possible.  Create a new Game Object in your scene and attach the `Pool` script.  Then, attach the `PooledObject` script to any prefabs that you want to be pooled, and drag them into the object pools list, with a best-guess for how many will be used concurrently:
 
 > If you exceed the amount in the object pool, new ones will be spawned with `Instantiate()` rather than failing.
@@ -181,13 +181,13 @@ public class Projectile : MonoBehaviour {
 
 ![Projectile spawner with pool](/assets/2019_projectile_spawner.gif)
 
-# `Instantiate()` doesn't care, but `SetActive()` does
+## `Instantiate()` doesn't care, but `SetActive()` does
 The really nice thing about using `Instatiate()` and `Destroy()` is that you don't have to worry about any kind of previous state on the object -- everything is new and fresh.  If you're disabling and re-enabling objects (like in a pool), you **do** have to pay attention to object state; particle progress, animations, and any variables changed on components can all trip you up.  There are ways you could reset components to fresh (serialization), but if you want to keep your performance intact, this is just something that you're going to have to eat, sorry.
 
 ---
 
-# The numbers
-What good is an optimization without running the numbers?
+## The Numbers
+What good is an optimization without profiling?
 
 I'm testing this with a modified version of the above `ProjectileSpawner` code.  To avoid variance, I've removed the randomness and some other stuff;
 ```cs

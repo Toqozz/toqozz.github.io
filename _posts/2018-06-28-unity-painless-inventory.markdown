@@ -14,7 +14,7 @@ When I say easy to use, I mean:
 
 And I think that these points are quite significant, particularly the first, because it ties everything else together.  The majority of material I found online[<sup>1</sup>](https://unity3d.com/learn/tutorials/projects/adventure-game-tutorial/inventory) [<sup>2</sup>](https://github.com/nzhul/inventory-system) [<sup>3</sup>](https://www.reddit.com/r/Unity3D/comments/6yt3e5/anybody_have_any_tips_on_a_scriptable_object/) [<sup>4...</sup>](https://answers.unity.com/questions/1260736/scriptable-objects-as-inventory-items-unable-to-sa.html) really doesn't explain much more than some tips on getting started, or misses these marks.  So my goal here is to try and collate the information and experience I gathered when writing our inventory system.
 
-# Why Scriptable Objects?
+## Why Scriptable Objects?
 Don't be alarmed if you haven't even heard of scriptable objects in Unity until now.  These things are severely underrepresented in the Unity documentation and examples.  Consequently, they seem to have a kind of air around them that suggests they're complicated and difficult to understand, when the opposite is true.  If you know what `MonoBehaviour` is, I'm sure `ScriptableObject` will be no stretch.
 
 Classes that inherit from `ScriptableObject` are essentially `MonoBehaviour` classes with the exception that they don't need to be attached to game objects.  In the right situation, this means that they can be much more versatile and efficient than their counterparts.  They also offer a powerful abstraction, which is often exactly what you want in complicated systems.
@@ -37,10 +37,10 @@ I realise that I might be jumping ahead a bit here, but the main point is that s
 
 > Some more resources on scriptable objects: [1](https://www.youtube.com/watch?v=6vmRwLYWNRo) [2](https://www.youtube.com/watch?v=raQ3iHhE_Kk).  These both highlight a bunch of use-cases (there are many)
 
-# Backend and Frontend
+## Backend and Frontend
 Many inventory systems tie the frontend (display of items) and backend (saving, loading, positioning) together.  I think its important to have a separation here because it heavily abstracts the behaviour of each component (and we already know abstraction is good).  We can then (more easily) have tightly-wound and optimised operations while maintaining feature rich and satisfying item behaviour.
 
-## Backend
+### Backend
 First of all, we need item classes.  This is pretty straightforward; here's an example of the class structure we're using in our game:
 
 ```cs
@@ -137,10 +137,10 @@ public class Inventory : ScriptableObject {
     }
 
     public static void InitializeFromDefault() {
-		if (_instance) DestroyImmediate(_instance);
-		_instance = Instantiate((Inventory) Resources.Load("InventoryTemplate"));
-		_instance.hideFlags = HideFlags.HideAndDontSave;
-	}
+        if (_instance) DestroyImmediate(_instance);
+        _instance = Instantiate((Inventory) Resources.Load("InventoryTemplate"));
+        _instance.hideFlags = HideFlags.HideAndDontSave;
+    }
 
     public static void LoadFromJSON(string path) {
         if (_instance) DestroyImmediate(_instance);
@@ -220,7 +220,7 @@ And the methods that follow are of course for reading and writing our object dat
 
 What comes next shouldn't be too foreign.  These are all standard helper methods for managing an array.  After any operation that modifies the inventory, we call `Save()`, which will be discussed shortly.  We can afford to save every update in our game because it doesn't happen very frequently and the inventory isn't very large; if you have a particularly large inventory or update frequently, you might want to configure something less granular.<br>  We're also not checking for out of bounds exceptions here, which may be something useful to include.
 
-## Saving
+### Saving
 What good is an inventory that can't be saved (and loaded)?  We've got some methods in place to help us, but it would be more convenient if we had something to manage the whole operation:
 
 ```cs
@@ -299,7 +299,7 @@ We now have a workable inventory backend.  To recap, our backend involves:
 - **Save manager.**<br>
 &nbsp;&nbsp;&nbsp;&nbsp;*Simple helper to manage saving and loading in a convenient way.*
 
-# Frontend
+### Frontend
 If we've succeeded in our goal (making the inventory painless to use), then developing the frontend should be quite simple.
 
 For this example, you should know that I've set up a few empty game objects to act as "slots", which have roughly the following script attached:
@@ -338,7 +338,7 @@ public class PhysicalInventory : MonoBehaviour {
         // Load example.
         inventorySlots = new List<Slot>();
         inventorySlots.AddRange(GameObject.FindObjectsOfType<Slot>());
-        
+
         // Maintain some order (just in case it gets screwed up).
         inventorySlots.Sort((a, b) => a.index - b.index);
 
@@ -369,7 +369,7 @@ The real frontend has a fair few additional methods, which you can take a look a
 
 ---
 
-# Actually Using It
+## Actually Using It
 The idea is that you create a new `ItemInstance` through code when inserting an item into the inventory (or maybe when you spawn the object, or whatever works best).
 
 One way you could do this is by creating a new `MonoBehaviour` script which you'd attach to the `GameObject`, which would allow you to store the `ScriptableObject` representation;
@@ -410,5 +410,3 @@ And we can verify that the item was in fact inserted into the inventory by inspe
 ![Verifying item is inserted via debugger](/assets/2018_inventory_debugging.gif)
 
 Alternatively, you can do some poor mans debugging and scatter some `Debug.Log`s around to achieve roughly the same thing with less/more effort.
-
-> *Note:* I've edited this post since I made it, please please let me know if something isn't working as intended and I'll do my best correction: toqoz (at) hotmail (dot) com

@@ -15,7 +15,7 @@ There's a lot of ifs and buts here, which is a pain in the ass if you just want 
 
 ---
 
-# [`DrawMeshInstanced()`](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstanced.html)
+## [`DrawMeshInstanced()`](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstanced.html)
 You can use `Graphics.DrawMeshInstanced()` to get around a lot of these conditions.  This will draw a number of meshes (up to 1023 in a single batch) for a single frame.
 
 This is a particularly nice solution for when you want to draw a lot of objects that don't move very much, or only move in the shader (trees, grass).  It allows you to easily shove meshes to the GPU, customize them with `MaterialPropertyBlock`s, and avoid the fat overhead of `GameObject`s.  Additionally, Unity has to do a little less work to figure out if it can instance the objects or not, and will throw an error rather than silently nerfing performance.  The main downside here though is that moving these objects usually results in a huge `for` loop, which kills performance.
@@ -96,9 +96,9 @@ Shader "Custom/InstancedColor" {
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_instancing
-            
+
             #include "UnityCG.cginc"
-            
+
             struct appdata_t {
                 float4 vertex   : POSITION;
                 float4 color    : COLOR;
@@ -126,14 +126,14 @@ Shader "Custom/InstancedColor" {
                 #ifdef UNITY_INSTANCING_ENABLED
                     o.color = _Colors[instanceID];
                 #endif
-                
+
                 return o;
             }
-            
+
             fixed4 frag(v2f i) : SV_Target {
                 return i.color;
             }
-            
+
             ENDCG
         }
     }
@@ -150,7 +150,7 @@ Shader "Custom/InstancedColor" {
 > If setting up a random array in the shader feels awkward, that's because it is.  There doesn't seem to be a way to get Unity to set up an array for you and index the color automatically.  If we were using individual game objects, we could do something like [this](https://docs.unity3d.com/540/Documentation/Manual/GPUInstancing.html).  You could probably get this to work by digging into the shader source and having a look at what names Unity uses for the arrays, but that's pretty convoluted for no good reason.
 
 
-# [`DrawMeshInstancedIndirect()`](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html)
+## [`DrawMeshInstancedIndirect()`](https://docs.unity3d.com/ScriptReference/Graphics.DrawMeshInstancedIndirect.html)
 `DrawMeshInstanced()` turns out to be a sort of wrapper around `DrawMeshInstancedIndirect()`.  You can achieve everything in the latter that you can with the former (and vice versa, with complications).  `DrawMeshInstanced()` is mainly a friendly way to draw meshes without touching the GPU.
 
 Naturally, some nice things get lost in the abstraction.  First of all, the `Indirect` variant allows you to bypass the 1023 mesh limit and draw as many meshes as you like in a single batch (the 1023 mesh limit seems to actually inherited from [`MaterialPropertyBlock`](https://docs.unity3d.com/ScriptReference/MaterialPropertyBlock.CopyProbeOcclusionArrayFrom.html)).  The primary benefit, however, is that you can offload the entirety of the work onto the GPU.  With `DrawMeshInstanced()`, Unity has to upload the array of mesh matrices to the GPU each frame, whereas `DrawMeshInstancedIndirect()` creates and stores data on the GPU indefinitely.  This also means using GPU-based structures to store data, mainly [`ComputeBuffer`s](https://docs.unity3d.com/ScriptReference/ComputeBuffer.html), which can be scary up front but turns out to be more convenient, and opens the door to some easy mass parallelisation via compute shaders.
@@ -262,9 +262,9 @@ Shader "Custom/InstancedIndirectColor" {
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            
+
             #include "UnityCG.cginc"
-            
+
             struct appdata_t {
                 float4 vertex   : POSITION;
                 float4 color    : COLOR;
@@ -291,11 +291,11 @@ Shader "Custom/InstancedIndirectColor" {
 
                 return o;
             }
-            
+
             fixed4 frag(v2f i) : SV_Target {
                 return i.color;
             }
-            
+
             ENDCG
         }
     }
@@ -316,7 +316,7 @@ The 1023 mesh limit has also disappeared.  Pushing the population up to even 100
 
 ---
 
-# Adding movement with a compute shader
+## Adding Movement With a Compute Shader
 Now that we're using `DrawMeshInstancedIndirect()`, we can add some mesh movement without crushing performance.
 
 [Compute Shaders](https://docs.unity3d.com/Manual/class-ComputeShader.html) are special programs that run on the GPU and allow you to utilize the massive parallel power of graphics devices for non-graphics code.  I'm mostly looking to demonstrate how you can use a compute shader with the other tools shown so far, so I won't explain compute shaders too in-depth; [here](http://kylehalladay.com/blog/tutorial/2014/06/27/Compute-Shaders-Are-Nifty.html) is a good blog post talking about them, which covers everything better than I could.
@@ -399,7 +399,7 @@ public class DrawMeshInstancedIndirectDemo : MonoBehaviour {
         material.SetBuffer("_Properties", meshPropertiesBuffer);
     }
 
-...
+    ...
 
     private void Update() {
 ++      int kernel = compute.FindKernel("CSMain");

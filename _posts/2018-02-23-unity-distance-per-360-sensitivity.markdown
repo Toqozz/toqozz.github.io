@@ -8,14 +8,14 @@ Physical mouse distance to camera view movement can be an important attribute in
 
 The scripts in this post will be Unity-specific, however the process should be able to be easily applied to any engine.
 
-# Rotation Degrees
+## Rotation Degrees
 The first step is obviously a script that lets the mouse affect the camera.  A basic implementation might look like the following:
 
 ```cs
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-    
+
 public class MouseLook : MonoBehaviour {
     public float sensitivityX = 1f;
     public float sensitivityY = 1f;
@@ -27,7 +27,7 @@ public class MouseLook : MonoBehaviour {
     private float rotationY = 0f;
     private Quaternion originalRotation;
 
-    void Update () {
+    private void Update () {
         //Gets rotational input from the mouse
         rotationY += Input.GetAxisRaw("Mouse Y") * sensitivityY;
         rotationX += Input.GetAxisRaw("Mouse X") * sensitivityX;
@@ -44,7 +44,7 @@ public class MouseLook : MonoBehaviour {
         transform.localRotation = originalRotation * xQuaternion * yQuaternion;
     }
 
-    void Start () {
+    private void Start () {
         originalRotation = transform.localRotation;
     }
 
@@ -69,13 +69,13 @@ There are a couple of niceties in this script that will make our life easier.  I
 
 ![mouse look](/assets/2018_unity_mouse_look.gif)
 
-# Physical Cursor Distance
+## Physical Cursor Distance
 While physical cursor distance isn't what this post is about, it's valuable in aiding the conversion.  It's also beneficial in understanding some of the key concepts here.
 
-## Screen DPI
+### Screen DPI
 Screen DPI (dots per inch, but also pixels per inch) defines how many pixels are within each inch of space on the display.  A list of common device DPI values and a calculator can be found [here](https://www.sven.de/dpi/).  Screen DPI helps us correlate traveling 1 pixel to a physical distance on the display.  For a display of 96 DPI, when the cursor moves 1 pixel, it moves 1/96th of an inch -- 0.010416".
 
-## Application
+### Application
 To apply this to our project, we can use Unity's `Screen.dpi` property together with a mouse delta value to figure out the physical distance our cursor has traveled on the real life screen;
 
 ```cs
@@ -97,13 +97,13 @@ This delta value only shows change when the mouse moves at least a pixel, so hig
 
 > *Note:* I've heard that the value from `GetAxis()` / `GetAxisRaw()` can vary depending on mouse.  I haven't seen this behaviour myself, and it doesn't make sense that it should, but it's something to be careful of nonetheless.
 
-# Physical Mouse Distance
-## Mouse DPI
+## Physical Mouse Distance
+### Mouse DPI
 Mouse DPI defines how many movements are measured over an inch.  At 400 DPI and assuming a perfect sensor / infinite polling rate, 400 instructions are reported to the OS for every inch of movement.  In reality it doesn't always work quite like this, but for our purposes we needn't bother with more specifics.
 
 It then follows that we should be able to simply divide the mouse delta by our dpi to achieve a physical distance.
 
-## Application
+### Application
 The application here is much the same as calculating mouse cursor distance;
 
 ```cs
@@ -123,14 +123,10 @@ mouseDistanceInches = cursorDistancePixels / mouseDPI;
 
 Here, `mouseDPI` represents the DPI of the player's mouse.  Unfortunately, I know of no programmatic way get mouse DPI, and there probably is no way due to its nature -- we know the monitor DPI because it is reported over the interface (HDMI / DisplayPort / etc), but mice have no such device.  This is something you'll have to query players about.
 
-# Tying Everything Together
+## Tying Everything Together
 To accomplish our original goal of calculating mouse distance per a 360 degree rotation, we just need to quickly revise our initial mouse script.
 
 ```cs
-using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-    
 public class MouseLook : MonoBehaviour {
     public float mouseDPI = 800f;
 
@@ -149,7 +145,7 @@ public class MouseLook : MonoBehaviour {
     private float mouseDistanceInches = 0f;
     private float stop = false;
 
-    void Update () {
+    private void Update () {
         //Gets rotational input from the mouse
         rotationY += Input.GetAxisRaw("Mouse Y") * sensitivityY;
         mouseXDelta = Input.GetAxisRaw("Mouse X");
@@ -176,7 +172,7 @@ public class MouseLook : MonoBehaviour {
         transform.localRotation = originalRotation * xQuaternion * yQuaternion;
     }
 
-    void Start () {
+    private void Start () {
         originalRotation = transform.localRotation;
     }
 
@@ -201,7 +197,7 @@ In the Unity project (linked at the bottom of the post), I've set up a nice debu
 
 ![debug ui and 360 calculations](/assets/2018_debug_ui.gif)
 
-# Solving For Distance Mathematically
+## Solving For Distance Mathematically
 Of course, once we've figured out the angle that a mouse delta of 1 relates to, we can solve distance for 360 degrees.
 If we set our look sensitivity to 1 (in the Unity inspector) so that it doesn't interfere with our mouse delta, we can use our current system to find that -- with the rotation method we're using -- 20 dots of mouse movement is equal to 1 degree of rotation.  
 
@@ -219,4 +215,3 @@ And there you have it!  Physical mouse distance per 360 accurately calculated wi
 Hopefully through reading this blog post you have gained the understanding to solve this problem for any engine, and fix any minor issues that may arise in the scripts posted here due to a Unity version change or otherwise.
 
 > *Full scripts available at this [github](https://github.com/Toqozz/blog-code/tree/master/mouse_360) repository.*
-

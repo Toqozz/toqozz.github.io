@@ -8,17 +8,17 @@ categories:
 ![duck-game-cover.jpg](/assets/2018_duck_game_title.jpg)
 So you want to make some mods for Duck Game?  Look no further.  This guide should tell you almost everything you need to know about making a good mod that actually functions.  We'll talk about getting set up, explain some of Duck Game's core mod structure, talk about networking, and hopefully most of the other little details you might need.
 
-# Is making mods difficult?
+## Is Making Mods Difficult?
 Mods for Duck Game can definitely be made with only a basic understanding of programming.  Whether those mods are spaghetti or not might be a different story, but making basic mods in Duck Game is relatively easy.
 
 Skills that may help significantly: knowledge of basic object oriented programming, basic C# knowledge, a bit of intuition in reading other people's code, and most of all, **time**.  You might have heard elsewhere that writing mods for Duck Game is very fiddly, and that's because it is.  A lot (most?) of your time will be spent reading through the Duck Game source code to try and figure out how the developer has achieved a similar effect to something you're trying to make, and then deciphering *why* exactly it has been done in that way.  If you don't have much in the way of these skills just yet, making mods can be a great learning experience.
 
-# Before Starting
+## Before Starting
 First of all, please read through [this](https://steamcommunity.com/sharedfiles/filedetails/?id=484818341) guide if you haven't already.  It'll help you set up your environment for writing your first mod and explain some basic variables, although I didn't find the latter to be of much use personally.
 
 ---
 
-# The Modding Process
+## The Modding Process
 Let's make a simple "Hello World" mod.  I'm going to explain the entire process from head to toe, which should give you some intuition on how to progress when you want to write some mods for yourself.
 
 First of all, we need a mod idea.  A simple example that comes to mind is a pistol that shoots missiles.
@@ -122,8 +122,7 @@ At this point I'd recommend making a custom map using the game's level editor an
 ![Rocket pistol in level editor](/assets/2018_rocket_pistol_in_menu.png)
 ![Rocket pistol in action](/assets/2018_rocket_pistol_in_action.gif)
 
-## More functionality
-
+### More Functionality
 Lets add something else.  What if we wanted to make it so that the weapon gets dropped every time we shoot?  Here's where some intuition comes in, and getting to know the codebase will help.  Knocking items out of people's hands is a fairly common action in Duck Game, so you can bet there's a method in place already for it.  The most logical place for this method would be on the Duck object -- indeed, `Disarm()` exists.  The next thing we need is a reference to the Duck object so that we can actually call this method.  A logical place for this might be on the item -- indeed, `owner` exists.
 
 Once we've figured out what method we want to use, it's relatively easy to find out how to use it.  Right click on the method in your decompiler and click "Find Usages".  This will show you all the usages of the method in the Duck Game source, and is your number one guide in figuring out how to use something.
@@ -155,7 +154,7 @@ namespace DuckGame.ExampleMod {
 
 ![Rocket pistol with disarm](/assets/2018_rocket_pistol_with_disarm.gif)
 
-## Changing look and details
+### Changing Look and Details
 
 Changing the look of your item can be easy or difficult depending on how much you want to change.  For starters, let's change the weapon sprite to something more fitting.  Place the sprite you want to use in your mod's content folder (`Documents/DuckGame/Mods/ExampleMod/content` if you're following along), and give it a fitting name.  I'll be using something I prepared earlier;
 
@@ -171,7 +170,7 @@ namespace DuckGame.DevelopmentMod {
     public class RocketPistol : Pistol {
          // Property to hold our sprite.
         private SpriteMap _sprite;
-        
+
         public RocketPistol(float xval, float yval) : base(xval, yval) {
             ...
 
@@ -224,7 +223,7 @@ public RocketPistol(float xval, float yval) : base(xval, yval) {
     this.collisionOffset = new Vec2(-7f, -4f);
     this.collisionSize = new Vec2(17f, 9f);
     this._fireSound = GetPath("sounds/laser");
-           
+
     this._sprite.SetAnimation("idle");
 }
 ```
@@ -273,19 +272,19 @@ I now realise that most of the reload animation gets lost in the smoke -- but it
 
 ---
 
-# Publishing
+## Publishing
 
 To upload your mod to the steam workshop, I recommend reading the section titled "Uploading and updating" of the [official steam guide](https://steamcommunity.com/sharedfiles/filedetails/?id=484818341).
 
 ---
 
-# Networking
+## Networking
 
 There's not a lot of information out there on making your mod work online.
 
 The first thing you should know is that Duck Game doesn't use your typical client-server architecture.  There is a main host that handles level transitions and things like that, but each duck / computer effectively acts as its own server for objects that it thinks it owns.  Examples of these might be items that you've picked up (weapons, boxes, etc), or things you've interacted with (doors, mostly).  The main thing to realise here is that all clients work together to send and receive information and synchronise their version of the scene.  Each duck is responsible for synchronising the things that they own, and your mod is responsible for specifying exactly how that happens.
 
-## State Bindings
+### State Bindings
 Variables that have state bindings attached to them will have their values sent from the object owner to the other clients.  You should use these to keep important variables synchronised across clients.
 
 An example of state bindings being used in the official game is for grenades;
@@ -324,7 +323,7 @@ There's a degree of authority involved with state bindings.  You can't really ch
 
 On the PC release, state bindings are generally synchronised as soon as possible upon being changed.
 
-## Fondle()
+### Fondle()
 `Fondle()` is used to take to take ownership of an object.  As we know, this mostly means handing over control of the state bindings.  When a local Duck picks up or interacts with an object, it automatically calls `Fondle()` on the object to make sure it's in control of the object.
 
 ```cs
@@ -356,7 +355,7 @@ if (!this._fucked && (double) this._hitPoints < (double) this._maxHealth / 2.0) 
 }
 ```
 
-## Level.Add() and isServerForObject
+### `Level.Add()` and `isServerForObject`
 When you need to add something to a level, be it a feather, box, bullet, or otherwise, chances are you'll be using `Level.Add()` in some form or another.
 
 When a client who is the object owner calls `Level.Add()`, it adds the object to the level and marks its entirety to be sent to each client.  When a client who isn't the object owner calls `Level.Add()`, it only adds the object to the level.  For this reasoning, it is important that you **only** call `Level.Add()` for the object's owner; if you don't, chances are two copies will be spawned -- one local (spawned by you) and one remote (spawned by the owner).
@@ -392,7 +391,7 @@ public void Scream() {
 
 ---
 
-# Notes / extra thought dump stuff
+## Notes / extra thought dump stuff
 Resources that helped me:
 - https://steamcommunity.com/sharedfiles/filedetails/?id=484818341
 - https://steamcommunity.com/sharedfiles/filedetails/?id=595956552
