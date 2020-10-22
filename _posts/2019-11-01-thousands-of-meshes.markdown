@@ -5,7 +5,7 @@ date: 2019-11-01
 categories:
 ---
 
-![Demo gif](/assets/2019_mesh_spiral.gif)
+![Demo gif](/assets/2019_mesh_spiral.gif){:width="1029px" height="634px"}
 GPU instancing is a graphics technique available in Unity to draw lots of the same mesh and material quickly.
 
 In the right circumstances, GPU instancing can allow you to feasibly draw even millions of meshes.  Unity tries to make this work automatically for you if it can.  If all your meshes use the same material, 'GPU Instancing' is ticked, your shader supports instancing, lighting and shadows play nicely, you're not using a skinned mesh renderer, etc, Unity will automatically batch meshes into a single draw call.
@@ -140,12 +140,12 @@ Shader "Custom/InstancedColor" {
 }
 ```
 
-![1022 meshes with standard shader](/assets/2019_1022_uncolored.png)
+![1022 meshes with standard shader](/assets/2019_1022_uncolored.png){:width="1041px" height="646px"}
 *1022 meshes with the standard shader.*
-![1022 meshes with standard shader](/assets/2019_1022_colored.png)
+![1022 meshes with standard shader](/assets/2019_1022_colored.png){:width="1044px" height="649px"}
 *1022 meshes with a custom shader, and per-mesh colors*
 
-> Note that shadows are missing on the colored version.  This is because we're using a custom shader to apply the colors which, doesn't have a shadow pass.  Have a look at [this](https://docs.unity3d.com/Manual/SL-VertexFragmentShaderExamples.html) for some examples of adding shadow casting/receiving to a custom shader.
+> Note that shadows are missing on the colored version.  This is because we're using a custom shader to apply the colors which doesn't have a shadow pass.  Have a look at [this](https://docs.unity3d.com/Manual/SL-VertexFragmentShaderExamples.html) for some examples of adding shadow casting/receiving to a custom shader.
 
 > If setting up a random array in the shader feels awkward, that's because it is.  There doesn't seem to be a way to get Unity to set up an array for you and index the color automatically.  If we were using individual game objects, we could do something like [this](https://docs.unity3d.com/540/Documentation/Manual/GPUInstancing.html).  You could probably get this to work by digging into the shader source and having a look at what names Unity uses for the arrays, but that's pretty convoluted for no good reason.
 
@@ -303,7 +303,7 @@ Shader "Custom/InstancedIndirectColor" {
 ```
 > The struct for your `StructuredBuffer` **must** be byte-wise identical throughout shader/compute shader/script or you'll see bugginess.  These structures are only matched up between script and shader by reading bytes.
 
-![1022 meshes using DrawMeshInstancedIndirect](/assets/2019_1022_indirect_colored.png)
+![1022 meshes using DrawMeshInstancedIndirect](/assets/2019_1022_indirect_colored.png){:width="1038px" height="644px"}
 *1022 meshes drawn with `DrawMeshInstancedIndirect`*
 
 A key difference here is that with `DrawMeshInstanced()`, we were giving Unity an array of matrices and having it automagically figure out vertex positions before we got to the shader.  Here, we're being much more direct in that we're pushing the matrices to the GPU and applying the transformation ourselves.  The shader instancing code has been cut down significantly, which is nice, and we've gained about a millisecond in rendering.
@@ -311,7 +311,7 @@ Note, however, that this number is heavily influenced by the rest of the game.  
 
 The 1023 mesh limit has also disappeared.  Pushing the population up to even 100, 000 has little affect on my system (Ryzen 1700, 1080Ti):
 
-![100k meshes using DrawMeshInstancedIndirect](/assets/2019_100k_indirect_colored.png)
+![100k meshes using DrawMeshInstancedIndirect](/assets/2019_100k_indirect_colored.png){:width="1043px" height="645px"}
 *100k meshes drawn with `DrawMeshInstancedIndirect`*
 
 ---
@@ -411,7 +411,7 @@ public class DrawMeshInstancedIndirectDemo : MonoBehaviour {
 }
 ```
 
-![Pushing a lot of meshes around](/assets/2019_compute_movement.gif)
+![Pushing a lot of meshes around](/assets/2019_compute_movement.gif){:width="1029px" height="634px"}
 
 And that's all, really.  Now you know how to move and draw (hundreds of) thousands of meshes efficiently.
 

@@ -67,7 +67,7 @@ One irregularity here is that we're using `Input.GetAxisRaw()` rather than `Inpu
 
 There are a couple of niceties in this script that will make our life easier.  In particular, notice `rotationX`.  This variable is our rotation angle from the center in degrees; `rotationX` will be 180 when we're looking directly behind our camera's original position and 0 when we're looking straight ahead.  Using this variable, we can tell how far the camera is turned -- a step closer to calculating physical distance per 360 degrees.
 
-![mouse look](/assets/2018_unity_mouse_look.gif)
+![Mouse Look](/assets/2018_unity_mouse_look.gif){:width="1008px" height="524px"}
 
 ## Physical Cursor Distance
 While physical cursor distance isn't what this post is about, it's valuable in aiding the conversion.  It's also beneficial in understanding some of the key concepts here.
@@ -195,13 +195,13 @@ Now `mouseDistanceInches` holds the mouse distance in inches after a 360 degree 
 
 In the Unity project (linked at the bottom of the post), I've set up a nice debug UI that should make it easy to see what's going on with the various values.
 
-![debug ui and 360 calculations](/assets/2018_debug_ui.gif)
+![debug ui and 360 calculations](/assets/2018_debug_ui.gif){:width="1008px" height="524px"}
 
 ## Solving For Distance Mathematically
 Of course, once we've figured out the angle that a mouse delta of 1 relates to, we can solve distance for 360 degrees.
 If we set our look sensitivity to 1 (in the Unity inspector) so that it doesn't interfere with our mouse delta, we can use our current system to find that -- with the rotation method we're using -- 20 dots of mouse movement is equal to 1 degree of rotation.  
 
-![1 degree = 20 dots](/assets/2018_1deg_20dots.gif)
+![1 degree = 20 dots](/assets/2018_1deg_20dots.gif){:width="1008px" height="524px"}
 
 With this information we can associate 1 delta worth of movement with 0.05 degrees of rotation, when using a sensitivity of 1.  Given this, the following equation should calculate distance for a 360 given any sensitivity:
 

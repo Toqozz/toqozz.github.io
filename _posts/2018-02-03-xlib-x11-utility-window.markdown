@@ -9,7 +9,7 @@ categories:
 
 The main thing this meant was that I had to interface with X11 directly.  I wanted a pure X11 utility window -- no window manager positioning, no window borders, just compositor shadows.
 
-![Pure utility window](/assets/2018_pure_utility_window.png)
+![Pure utility window](/assets/2018_pure_utility_window.png){:width="548px" height="87px"}
 *Pure X11 utility window (bspwm).*
 
 The advantage of a window like this is that it can be placed anywhere by us, and resized independently of the window manager (assuming the WM is standards compliant).  While this approach might not be the most elegant depending on your sentiment, it's the only real way to have a good level of customization and control over your window.  This type of solution is also likely to be necessary for achieving a fullscreen mode in some 3D application, or similar.
@@ -110,4 +110,4 @@ To my understanding, properties starting with "`_NET`" are part of the newer XDG
 Freedesktop has a list of the available (newer) properties [here](https://specifications.freedesktop.org/wm-spec/1.3/ar01s05.html), whereas the older properties can be found [here](https://tronche.com/gui/x/xlib/ICC/).
 
 You can also use the `xprop` utility to see the properties of existing windows you're using.  This can be helpful in making complicated windows "just-so" and really understanding properties.  Under most distributions, `xprop` is available as the `xorg-xprop` package.
-![Getting window properties with xprop](/assets/2018_xprop.png)
+![Getting window properties with xprop](/assets/2018_xprop.png){:width="801px" height="466px"}

@@ -5,7 +5,7 @@ date: 2018-11-20
 categories:
 ---
 
-![duck-game-cover.jpg](/assets/2018_duck_game_title.jpg)
+![duck-game-cover.jpg](/assets/2018_duck_game_title.jpg){:width="1600px" height="800px"}
 So you want to make some mods for Duck Game?  Look no further.  This guide should tell you almost everything you need to know about making a good mod that actually functions.  We'll talk about getting set up, explain some of Duck Game's core mod structure, talk about networking, and hopefully most of the other little details you might need.
 
 ## Is Making Mods Difficult?
@@ -25,7 +25,7 @@ First of all, we need a mod idea.  A simple example that comes to mind is a pist
 
 The first thing we need to do is open up the Duck Game executable in a .NET decompiler ([ILSpy](https://github.com/icsharpcode/ILSpy#ilspy-------) or [dotPeek](https://www.jetbrains.com/decompiler/) work... I'll be using dotPeek).  This will let us see how the game was coded and give us some hints as to how we should code things.
 
-![dotPeek](/assets/2018_dotpeek.png)
+![dotPeek](/assets/2018_dotpeek.png){:width="693px" height="570px"}
 
 Since we're making a pistol, let's navigate to the Pistol class and have a look at what's going on;
 
@@ -119,14 +119,14 @@ As you can see, we only really need to change the ammo type and the base constru
 
 At this point I'd recommend making a custom map using the game's level editor and placing a spawner with your item.  As per the `EditorGroup` code above, it can be found under ExampleMod -> guns -> Rocket Pistol.
 
-![Rocket pistol in level editor](/assets/2018_rocket_pistol_in_menu.png)
-![Rocket pistol in action](/assets/2018_rocket_pistol_in_action.gif)
+![Rocket pistol in level editor](/assets/2018_rocket_pistol_in_menu.png){:width="1343px" height="471px"}
+![Rocket pistol in action](/assets/2018_rocket_pistol_in_action.gif){:width="782px" height="466px"}
 
 ### More Functionality
 Lets add something else.  What if we wanted to make it so that the weapon gets dropped every time we shoot?  Here's where some intuition comes in, and getting to know the codebase will help.  Knocking items out of people's hands is a fairly common action in Duck Game, so you can bet there's a method in place already for it.  The most logical place for this method would be on the Duck object -- indeed, `Disarm()` exists.  The next thing we need is a reference to the Duck object so that we can actually call this method.  A logical place for this might be on the item -- indeed, `owner` exists.
 
 Once we've figured out what method we want to use, it's relatively easy to find out how to use it.  Right click on the method in your decompiler and click "Find Usages".  This will show you all the usages of the method in the Duck Game source, and is your number one guide in figuring out how to use something.
-![dotPeek find usages](/assets/2018_dotpeek_find_usages.gif)
+![dotPeek find usages](/assets/2018_dotpeek_find_usages.gif){:width="1131px" height="587px"}
 
 ```cs
 // RocketPistol.cs
@@ -152,13 +152,13 @@ namespace DuckGame.ExampleMod {
 }
 ```
 
-![Rocket pistol with disarm](/assets/2018_rocket_pistol_with_disarm.gif)
+![Rocket pistol with disarm](/assets/2018_rocket_pistol_with_disarm.gif){:width="782px" height="466px"}
 
 ### Changing Look and Details
 
 Changing the look of your item can be easy or difficult depending on how much you want to change.  For starters, let's change the weapon sprite to something more fitting.  Place the sprite you want to use in your mod's content folder (`Documents/DuckGame/Mods/ExampleMod/content` if you're following along), and give it a fitting name.  I'll be using something I prepared earlier;
 
-![Rocket pistol sprite](/assets/2018_rocket_pistol_sprite.png)
+![Rocket pistol sprite](/assets/2018_rocket_pistol_sprite.png){:width="260px" height="260px"}
 *(real sprite is much smaller (26x26))*
 
 > Sprites / sounds used can be found at [this Dropbox folder.](https://www.dropbox.com/sh/eyfkrfl7pen9g4q/AAA5nLatiaS457ny3dBKY7XZa?dl=0)
@@ -193,14 +193,14 @@ Most of this should be relatively straightforward by now.  For reference, to fig
 
 There are a few points here that would benefit from an explanation however, namely the collision information.  A picture is worth a thousand words, so here's a diagram:
 
-![Rocket pistol sprite diagram](/assets/2018_dg_sprite_diagram.png)
+![Rocket pistol sprite diagram](/assets/2018_dg_sprite_diagram.png){:width="520px" height="520px"}
 ***red** -- center<br>**green** -- collision offset<br>**yellow** -- collision size*
 
 The first point to understand here are first of all that 0, 0 is placed at the top left of the sprite.  The second point is that the collision offset and collision size are *relative* values; collision offset is relative to the center point, and collision size is relative to the collision offset.
 
 With that sorted, let's move on to something more fun: **animations**.  Animations in duck game are mainly delivered in the form of sprite sheets.  You're probably familiar with these if you've done any kind of game development before.  Here's one I made for our rocket pistol:
 
-![Rocket pistol frames](/assets/2018_rocket_pistol_frames.png)
+![Rocket pistol frames](/assets/2018_rocket_pistol_frames.png){:width="4420px" height="260px"}
 *(real sprite sheet has a transparent background)*
 
 The idea is simple; you make a sprite sheet similar to the above which contains all the frames of your animation, preferably in order.  You can -- and should -- store multiple "separate" animations within this file if you need more than one animation for the same object.  We can then create and assign animations from within the weapon's constructor;
@@ -267,7 +267,8 @@ public override void OnPressAction() {
 
 Copying code from the base class into your custom one is something you'll find yourself doing often in order to have more control over what the item does -- intricate mods can quickly become very tricky because of this.
 
-![Rocket Pistol with custom sprites and animations](/assets/2018_rocket_pistol_sprites_and_animations.gif)
+![Rocket Pistol with custom sprites and animations](/assets/2018_rocket_pistol_sprites_and_animations.gif){:width="602px" height="540px"}
+
 I now realise that most of the reload animation gets lost in the smoke -- but it's a nice detail nonetheless.
 
 ---

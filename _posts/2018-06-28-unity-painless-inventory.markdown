@@ -31,7 +31,7 @@ In the interest of efficiency, we probably don't want these to be `MonoBehaviour
 
 Scriptable objects provide access to all the engine structures and behaviour while maintaining a lightweight base.  Unlike `MonoBehaviour` classes, scriptable objects don't need to be attached to game objects -- they don't even need to be instanced in the scene.  They're also nicely tied into Unity; you can instance a scriptable object as an asset from an easy right click in your project directory, and that object can also be inspected and changed from the UI -- they're fully understood objects within the Unity ecosystem.  Code-based instantiation does of course still exist, but a real benefit here is being able to take hold of a real "physical" representation of your objects (designers take note!)
 
-![Creating a scriptable object asset in Unity](/assets/2018_creating_unity_scriptableobject.gif)
+![Creating a scriptable object asset in Unity](/assets/2018_creating_unity_scriptableobject.gif){:width="614px" height="523px"}
 
 I realise that I might be jumping ahead a bit here, but the main point is that scriptable objects allow us to create objects that access Unity structures, without incurring the fee of needing them to be attached to game objects.  Furthermore, they allow a great deal of abstraction, and abstraction is **important** in any large scale project.
 
@@ -73,11 +73,11 @@ All our items look like this.  You'll notice a couple things related to scriptab
 
 We inherit from `ScriptableObject`, which allows us to use `GameObject` in our `physicalRepresentation` field.  This field contains an item prefab (our inventory is 3D); if you were making a 2D inventory, this would probably be an `Image` or something similar.
 
-![Golemancer prototype inventory](/assets/2018_golemancer_prototype_inventory.png)
+![Golemancer prototype inventory](/assets/2018_golemancer_prototype_inventory.png){:width="827px" height="537px"}
 
 The last oddity is the `[CreateAssetMenu(menuName = "Items/Gem", fileName = "GemName.asset")]` line.  All this does is add an entry for our object to the right click menu in our project folder.
 
-!["Gem" added to right click menu](/assets/2018_gem_right_click.png)
+!["Gem" added to right click menu](/assets/2018_gem_right_click.png){:width="663px" height="269px"}
 
 > There's a one-to-many relationship between these scriptable objects and their assets.  Remember that they're really just classes underneath.
 
@@ -214,7 +214,7 @@ First of all, we have a getter whose goal is simply to maintain reference to the
 
 Next we have `InitializeFromDefault`, which initializes the inventory based on some default version.  This will be the "template" in your project directory -- *put it in the Resources folder*:
 
-![Creating the inventory template](/assets/2018_unity_creating_inventory_template.gif)
+![Creating the inventory template](/assets/2018_unity_creating_inventory_template.gif){:width="736px" height="585px"}
 
 And the methods that follow are of course for reading and writing our object data to disk.  Nothing out of the ordinary here.  If your local inventory is valuable (should not be tampered with) you probably want to incorporate some encryption at this point.<br>`HideAndDontSave` tells Unity not to show the object in the hierarchy, and not to save it to the scene.
 
@@ -403,10 +403,10 @@ public class PressEToInsert : MonoBehaviour {
 Note that both of the above scripts are attached to the object in this example, but it might make more sense to put the "Press E" logic on the player -- it's just easier to provide a snippet like this.
 
 Here's an example (red cube -- ruby item, white cube -- player):
-![Pickup demonstration](/assets/2018_inventory_pickup_demo.gif)
+![Pickup demonstration](/assets/2018_inventory_pickup_demo.gif){:width="1019px" height="618px"}
 
 And we can verify that the item was in fact inserted into the inventory by inspecting `Inventory.Instance` in a debugger (there should be one built into your IDE, I'm using [Rider](https://www.jetbrains.com/rider/)):
 
-![Verifying item is inserted via debugger](/assets/2018_inventory_debugging.gif)
+![Verifying item is inserted via debugger](/assets/2018_inventory_debugging.gif){:width="1040px" height="676px"}
 
 Alternatively, you can do some poor mans debugging and scatter some `Debug.Log`s around to achieve roughly the same thing with less/more effort.

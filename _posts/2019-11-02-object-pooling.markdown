@@ -5,7 +5,7 @@ date: 2019-11-02
 categories:
 ---
 
-![Demo gif](/assets/2019_projectile_spam.gif)
+![Demo gif](/assets/2019_projectile_spam.gif){:width="918px" height="514px"}
 [`Instantiate()`](https://docs.unity3d.com/ScriptReference/Object.Instantiate.html) is expensive.  If possible, you should never use it at runtime.  For one-offs this is usually done by spawning whatever objects you need in `Awake()`, and then calling `SetActive(true)` when you need them.  For more than one-offs, you probably want to use a pool.
 A pool is a group of objects that you instantiate at some convenient time (probably on scene load), and then later on, when you want to spawn an object, you grab it from the pool instead of making it fresh.  This technique is used extensively throughout just about any well-programmed game.
 
@@ -134,7 +134,7 @@ Usage is as straightforward as possible.  Create a new Game Object in your scene
 
 > If you exceed the amount in the object pool, new ones will be spawned with `Instantiate()` rather than failing.
 
-![Setup process demonstration](/assets/2019_create_pool.gif)
+![Setup process demonstration](/assets/2019_create_pool.gif){:width="560px" height="594px"}
 
 
 Then, instead of calling `Instatiate()` and `Destroy()`, we call `Pool.Spawn()` and `PooledObject.Finish()`:
@@ -179,7 +179,7 @@ public class Projectile : MonoBehaviour {
 
 > It would be better to cache the `PooledObject` component.  `GetComponent<>()` has been used here for simplicity.
 
-![Projectile spawner with pool](/assets/2019_projectile_spawner.gif)
+![Projectile spawner with pool](/assets/2019_projectile_spawner.gif){:width="1018px" height="613px"}
 
 ## `Instantiate()` doesn't care, but `SetActive()` does
 The really nice thing about using `Instatiate()` and `Destroy()` is that you don't have to worry about any kind of previous state on the object -- everything is new and fresh.  If you're disabling and re-enabling objects (like in a pool), you **do** have to pay attention to object state; particle progress, animations, and any variables changed on components can all trip you up.  There are ways you could reset components to fresh (serialization), but if you want to keep your performance intact, this is just something that you're going to have to eat, sorry.
@@ -258,10 +258,10 @@ The test is pretty basic.  We spawn 5,000 projectiles with either `Instantiate()
 
 These results aren't on-the-nose accurate -- I'm running in editor, and I'm only eyeballing the variance.  They're more than enough, however, to get the point across;
 
-![Profiler when running with Instantiate](/assets/2019_instantiate_5k_profiler.gif)
+![Profiler when running with Instantiate](/assets/2019_instantiate_5k_profiler.gif){:width="1008px" height="672px"}
 *`Instatiate()`/`Destroy()` profiler*
 
-![Profiler when running with object pools](/assets/2019_pool_5k_profiler.gif)
+![Profiler when running with object pools](/assets/2019_pool_5k_profiler.gif){:width="1008px" height="672px"}
 *Object pool profiler*
 
 The results are in!
