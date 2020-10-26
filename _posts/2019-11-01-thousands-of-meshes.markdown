@@ -333,8 +333,9 @@ struct MeshProperties {
 RWStructuredBuffer<MeshProperties> _Properties;
 float3 _PusherPosition;
 
-// For the sake of simplicity, only using 1, 1, 1 threads.
-[numthreads(1,1,1)]
+// We used to just be able to use (1, 1, 1) threads for whatever population (not sure the old limit), but a Unity update
+// imposed a thread limit of 65535.  Now, to populations above that, we need to be more granular with our threads.
+[numthreads(64,1,1)]
 void CSMain (uint3 id : SV_DispatchThreadID) {
     float4x4 mat = _Properties[id.x].mat;
     // In a transform matrix, the position (translation) vector is the last column.
@@ -405,7 +406,9 @@ public class DrawMeshInstancedIndirectDemo : MonoBehaviour {
 ++      int kernel = compute.FindKernel("CSMain");
 
 ++      compute.SetVector("_PusherPosition", pusher.position);
-++      compute.Dispatch(kernel, population, 1, 1);
+++      // We used to just be able to use `population` here, but it looks like a Unity update imposed a thread limit (65535) on my device.
+++      // This is probably for the best, but we have to do some more calculation.  Divide population by numthreads.x (declared in compute shader).
+++      compute.Dispatch(kernel, Mathf.CeilToInt(population / 64f), 1, 1);
         Graphics.DrawMeshInstancedIndirect(mesh, 0, material, bounds, argsBuffer);
     }
 }
