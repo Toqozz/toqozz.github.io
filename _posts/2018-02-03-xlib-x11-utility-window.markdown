@@ -111,3 +111,6 @@ Freedesktop has a list of the available (newer) properties [here](https://specif
 
 You can also use the `xprop` utility to see the properties of existing windows you're using.  This can be helpful in making complicated windows "just-so" and really understanding properties.  Under most distributions, `xprop` is available as the `xorg-xprop` package.
 ![Getting window properties with xprop](/assets/2018_xprop.png){:width="801px" height="466px"}
+
+
+*[Discuss on GitHub](https://github.com/Toqozz/blog-code/issues/2)*
