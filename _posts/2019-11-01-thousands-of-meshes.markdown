@@ -419,3 +419,6 @@ public class DrawMeshInstancedIndirectDemo : MonoBehaviour {
 And that's all, really.  Now you know how to move and draw (hundreds of) thousands of meshes efficiently.
 
 > Source code and Unity project available at [https://github.com/Toqozz/blog-code/tree/master/mesh_batching](https://github.com/Toqozz/blog-code/tree/master/mesh_batching).
+
+
+*[Discuss on GitHub](https://github.com/Toqozz/blog-code/issues/6)*
