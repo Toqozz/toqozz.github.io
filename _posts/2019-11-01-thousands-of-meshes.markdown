@@ -102,14 +102,12 @@ Shader "Custom/InstancedColor" {
             struct appdata_t {
                 float4 vertex   : POSITION;
                 float4 color    : COLOR;
-                float2 texcoord : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct v2f {
                 float4 vertex   : SV_POSITION;
                 fixed4 color    : COLOR;
-                float2 texcoord : TEXCOORD0;
             }; 
 
             float4 _Colors[1023];   // Max instanced batch size.
@@ -142,7 +140,7 @@ Shader "Custom/InstancedColor" {
 
 ![1022 meshes with standard shader](/assets/2019_1022_uncolored.png){:width="1041px" height="646px"}
 *1022 meshes with the standard shader.*
-![1022 meshes with standard shader](/assets/2019_1022_colored.png){:width="1044px" height="649px"}
+![1022 meshes with color shader](/assets/2019_1022_colored.png){:width="1044px" height="649px"}
 *1022 meshes with a custom shader, and per-mesh colors*
 
 > Note that shadows are missing on the colored version.  This is because we're using a custom shader to apply the colors which doesn't have a shadow pass.  Have a look at [this](https://docs.unity3d.com/Manual/SL-VertexFragmentShaderExamples.html) for some examples of adding shadow casting/receiving to a custom shader.
