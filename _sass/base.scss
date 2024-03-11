@@ -93,6 +93,22 @@ textarea { vertical-align: top; }
 /**
  * Images
  */
+video {
+    position: relative;
+    max-width: 100%;
+    height: auto;
+    left: 50%;
+    transform: translate(-50%);
+    padding: 20px 0 20px 0;
+}
+
+video + p em {
+    display: block;
+    text-align: center;
+    margin-top: -15px;
+    margin-bottom: 15px;
+}
+
 img {
     position: relative;
     max-width: 100%;
@@ -130,8 +146,17 @@ blockquote {
 /**
  * Code and syntax highlighting
  */
+ @font-face {
+    font-family: "Cascadia Code";
+    src: url("../assets/CascadiaCode.ttf");
+}
+
+code {
+    font-family: 'Cascadia Code', monospace;
+}
+
 pre {
-scrollbar-width: thin; scrollbar-color: $text-color $background-color; background-color: $background-color;  border: none;  padding: 0 0 4px 0; overflow:auto;  font-size: $code-font-size;  color: rgba(255,255,255,0.65);  line-height: 1.3 !important; }
+scrollbar-width: thin; scrollbar-color: $text-color $background-color; background-color: $background-color;  border: none;  padding: 0 0 4px 0; overflow:auto; font-size: $code-font-size;  color: rgba(255,255,255,0.65);  line-height: 1.3 !important; }
 .highlight .hll { background-color: #ffffcc }
 .highlight  { background: #282828; color: #ebdbb2; background-color: #282828 }
 .highlight .c { color: #928374; font-style: italic; background-color: #282828 } /* Comment */
