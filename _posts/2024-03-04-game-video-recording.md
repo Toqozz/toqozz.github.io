@@ -8,7 +8,7 @@ categories:
 <video muted="true" autoplay="autoplay" loop="loop" controls="true">
     <source src="/assets/2024_recording_recording.webm" type="video/webm">
 </video>
-*Easier than you think.*
+*A recording of a recording.*
 
 Recently I was struggling to record some demo webms on macOS -- basic stuff, like moving a sprite back and forth with some logic.  For some reason, I couldn't get things to move smoothly, without stuttering, so all my recordings were messed up.  This issue itself is bizarre (this should be possible, and trust me, I tried), but that's not the point of this post.  In reality, you're never going to get a truly high quality recording from a screen capture anyway.  Games are constantly fighting the OS for processor time, and even well-made games have frame timing issues.  If you're not pumping out a new frame exactly every 16.6667ms (or whatever your desired framerate is), then your recording is flawed.
 
