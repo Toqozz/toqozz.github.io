@@ -125,7 +125,7 @@ It turns out that `ffmpeg` actually accepts raw frames (of course).  So you can 
 - When recording starts:
     - Launch an `ffmpeg` process in a separate thread.  Spin in that thread, writing all the received frames into the process' `stdin`.
     - Enable 'recording mode', which sets the game's `dt` to `1.0/60.0` (my target recording framerate) and limits the game's framerate so that things are playable.
-- At the end of every frame, grab the frame output and send the raw bytes through to te the `ffmpeg` thread.  You'll want to buffer (i.e. copy) the output here, since `ffmpeg` might take longer than a frame to encode your video frame.
+- At the end of every frame, grab the frame output and send the raw bytes through to the `ffmpeg` thread.  You'll want to buffer (i.e. copy) the output here, since `ffmpeg` might take longer than a frame to encode your video frame.
 - When recording stops:
     - Close `stdin` on the `ffmpeg` thread and `.join()` from the main thread (this is blocking until `ffmpeg` finishes writing the file).
     - Disable recording mode.
