@@ -9,9 +9,9 @@ I've always had trouble remembering which order I should apply matrix multiplica
 
 I can hear the scoffs now; "You didn't know all this already?"  No, I didn't know all of this already.
 
----
+## Math Notation and Pre/Post-Multiply
 
-There are 2 main conventions for matrix-vector multiply, and those are **pre-multiply** and **post-multiply**.
+There are two main conventions for matrix-vector multiply, and those are **pre-multiply** and **post-multiply**.
 
 Post-multiply is the most dominant by far, especially in mathematical texts and really everything other than computer graphics.  It represents the vector as a single column matrix on the right side.  Like this:
 ![Matrix vs Vector, with column vectors.](/assets/2024_latex_column_vecs.png){:width="300px"}
@@ -41,8 +41,6 @@ The technical terminology you'll hear is *row vectors* if your vectors are rows 
 >This detail is obscured by the fact that you'll often hear it referred to as the library using either *column-major* or *row-major* matrices, but *row-major* and *column-major* are *also* computer science terms used to define how 2D arrays are stored in memory, which might lead to you scratching your head on [this wikipedia page](https://en.wikipedia.org/wiki/Row-_and_column-major_order).  This is a decision made by the programming language and totally irrelevant to what we're talking about here.  Our matrices are not even using 2D arrays!  When using either convention, the byte storage ends up being identical due to the translation components being flipped, so the storage method really doesn't tell us anything meaningful here.
 
 >[Some people](https://stackoverflow.com/a/20438735) might try to tell you that when you hear "row-major" or "column-major" you should think purely of storage and nothing else, but the reality is that much of the world uses this terminology to discriminate between row vectors and column vectors.
-
----
 
 ## Examples
 
@@ -199,8 +197,6 @@ The fact that you could have a shader that uses pre-multiply for some matrices a
 
 So there you have it.  Two libraries using identical memory representations but different conventions around multiplying matrices.  All that matters is what the math library actually does.  In hindsight it's obvious.
 
----
-
 ## What about matrix multiplication order?
 One good thing is that once you've figured out pre or post-multiply, the rules are the same for matrices, unless you're using the math library of a madman...
 
@@ -217,10 +213,8 @@ Matrix object_to_clip = world_to_clip * object_to_world;
 Vector4 result = object_to_clip * local_pos;
 ```
 
----
-
 ## One More Example
-To make things abundantly clear, here how a typical vertex shader in GLSL (which uses column vectors -- post-multiplication) would calculate `gl_Position`, given raw matrices from `VectorMath` that have not been transposed:
+To make things abundantly clear, here's how a typical vertex shader in GLSL (which uses column vectors -- post-multiplication) would calculate `gl_Position`, given raw matrices from `VectorMath` that have not been transposed:
 ```glsl
 layout(location = 0) in vec3 inPosition;
 uniform mat4 objectMatrix;
@@ -244,7 +238,7 @@ void main()
 }
 ```
 
-They're the same!  Of course they are.  The underlying memory representation is the same in both libraries.  The difference is that we're switching to GLSL math library, which uses column vectors, and interprets our matrices as columns of vectors.
+They're the same!  Of course they are -- the underlying memory representation is the same in both libraries.  The difference is that we're switching to GLSL's math library, which uses column vectors, and interprets our matrices as columns of vectors.
 
 If this all makes sense to you then you probably understand the concept enough to never be bothered by it again.
 
