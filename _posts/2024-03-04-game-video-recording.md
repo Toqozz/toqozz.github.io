@@ -173,7 +173,7 @@ pub fn begin_record(&mut self) {
                 "-s", &size,
                 "-i", "-",                      // Input as stdin.
                 "-c:v", "libvpx-vp9",           // Output codec.
-                "-pix_fmt", "yuva420p",
+                "-pix_fmt", "yuv420p",
                 "-y",                           // Overwrite output file.
                 "output.webm",                  // File name.
             ];
@@ -272,5 +272,33 @@ pub fn end_record(&mut self) {
     ffmpeg.handle.join().unwrap();
 }
 ```
+
+---
+
+## Lessons Learned From The Future
+*13/02/2025*
+
+There are a few more noteworthy things that I've come across using this in a non-indie environment.
+
+### Pipe Behaviour 
+Pipes are inherently quite tied to the OS.  In implementing this through C with Windows APIs you might learn that there's actually a lot of OS-specific setup and choices to make, in contrast to the Rust standard library, which is more-or-less "give me a pipe".
+
+> You can of course configure the pipe however you like with Rust, these details are just abstracted away by default.
+
+> Check out the pipe setup in [this](https://github.com/cademtz/ffmpipe/blob/804a4feab371d0b77db7d3cf37a34c7c5354e176/src/ffmpipe.cpp#L88) project on GitHub for a sensible Windows/C++ implementation.
+
+The kinds of choices here are unsurprisingly about the specifics of I/O.  Typically the encoding process is slower than the recording -- the game may be pumping out 60fps, while your encoder can only encode 30fps.  This time needs to be reclaimed at some point, and you'll want to consider your tradeoffs here.  On Windows, a non-async pipe will block on write once it's backed up enough, which is fine for recording pre-made scenes, but not so much if you're trying to interact or play -- lots of stuttering.  Of course, this stuttering won't be present in the recording, just while playing.
+
+The easiest solution is to just pick a fast encoder (such as NVENC) when recording interactive shots.
+
+### Media Players Like YUV420
+Although the command in my original post actually has this already, I think it's worth drawing more attention to.  `-pix_fmt yuv420p` is important if you want your video to *just work* on the most possible video players.  It tells `ffmpeg` to encode the video in the YUV colour space, with 4:2:0 subsampling.  Without this flag, much of the time `ffmpeg` will default to `-pix_fmt yuv444p`, which is 4:4:4 subsampling.  Advanced video players such as `mpv` and `vlc` will generally play either back just fine, but more primitive ones will not (Windows Media Player, some web browsers, etc).
+
+### FFmpeg Syntax
+This isn't really a problem, but I ended up moving towards the following command syntax which I like more:
+```sh
+ffmpeg -y -f rawvideo -framerate 60 -pix_fmt rgba -s:v 1920x1080 -i pipe:0 -c:v libx264 -pix_fmt yuv420p -crf 26 -preset ultrafast output.mp4
+```
+Some of these actually do have consequences.  `-s:v` will change specifically the video stream's resolution, while `-s` usually affects the video stream by default.  It's all pretty confusing.
 
 *[Discuss on GitHub](https://github.com/Toqozz/blog-code/issues/10)*
