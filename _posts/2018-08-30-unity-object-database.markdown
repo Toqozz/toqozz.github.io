@@ -93,7 +93,4 @@ Some people really resent any use of the `Resources/` folder.  I feel as though 
 
 To avoid any confusion, when I say `MonoBehaviour`-only type problem solving, I mean avoiding all use of the `Resources/` folder and strictly assigning objects in the inspector (drag and drop).
 
-&nbsp;
-A further point to note is that you probably shouldn't use something like this for huge databases.  Loading all those assets into memory can take time.  A solution might be to load the database once using an Init() method when the game starts.
-
-
+Further, note that you probably shouldn't use something like this for huge databases.  Loading all those assets into memory can take time.  A solution might be to load the database once using an Init() method when the game starts.

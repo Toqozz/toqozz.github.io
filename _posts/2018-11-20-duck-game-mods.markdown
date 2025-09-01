@@ -404,6 +404,3 @@ Setting `gravMultiplier` to a value of 0 or less, or `weight` to a value of 5 or
 
 ### soft impact vs solid impact
 Soft impacts happen when an object moves through something (throwing a grenade sideways through boxes).  Solid impacts happen when an object hits something that causes it to stop / triggers physics (throwing a grenade against a wall).
-
-
-*[Discuss on GitHub](https://github.com/Toqozz/blog-code/issues/5)*

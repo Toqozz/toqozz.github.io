@@ -300,5 +300,3 @@ This isn't really a problem, but I ended up moving towards the following command
 ffmpeg -y -f rawvideo -framerate 60 -pix_fmt rgba -s:v 1920x1080 -i pipe:0 -c:v libx264 -pix_fmt yuv420p -crf 26 -preset ultrafast output.mp4
 ```
 Some of these actually do have consequences.  `-s:v` will change specifically the video stream's resolution, while `-s` usually affects the video stream by default.  It's all pretty confusing.
-
-*[Discuss on GitHub](https://github.com/Toqozz/blog-code/issues/10)*

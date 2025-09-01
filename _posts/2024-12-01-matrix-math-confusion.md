@@ -7,7 +7,7 @@ categories:
 
 I've always had trouble remembering which order I should apply matrix multiplications in code, or which side the vector should go on for a matrix transform.  Obviously the order is important; you'll get very strange results if you get it wrong, but the devious thing about matrix math is that you'll often also get bizarre results if your math is just wrong in some *other* way.  It definitely pays to save yourself the future headache and get this right.  It's also not that complicated when it comes down to it.
 
-I can hear the scoffs now; "You didn't know all this already?"  No, I didn't know all of this already.
+"You didn't know all this already?"  No, I didn't know all of this already.
 
 ## Math Notation and Pre/Post-Multiply
 
@@ -251,5 +251,3 @@ If this all makes sense to you then you probably understand the concept enough t
 - A more detailed explainer that goes into the math, as well as coordinate spaces: [https://seanmiddleditch.github.io/matrices-handedness-pre-and-post-multiplication-row-vs-column-major-and-notations/](https://seanmiddleditch.github.io/matrices-handedness-pre-and-post-multiplication-row-vs-column-major-and-notations/)
 - Another explainer: [https://austinmorlan.com/posts/opengl_matrices/](https://austinmorlan.com/posts/opengl_matrices/)
 - Pretty useful overal resource on OpenGL transformations: [https://www.opengl.org/archives/resources/faq/technical/transformations.htm](https://www.opengl.org/archives/resources/faq/technical/transformations.htm)
-
-*[Discuss on GitHub](https://github.com/Toqozz/blog-code/issues/11)*

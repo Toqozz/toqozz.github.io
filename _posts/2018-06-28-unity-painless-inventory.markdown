@@ -410,6 +410,3 @@ And we can verify that the item was in fact inserted into the inventory by inspe
 ![Verifying item is inserted via debugger](/assets/2018_inventory_debugging.gif){:width="1040px" height="676px"}
 
 Alternatively, you can do some poor mans debugging and scatter some `Debug.Log`s around to achieve roughly the same thing with less/more effort.
-
-
-*[Discuss on GitHub](https://github.com/Toqozz/blog-code/issues/4)*

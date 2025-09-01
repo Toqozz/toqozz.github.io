@@ -281,6 +281,3 @@ If you're thinking: "Why would I ever want to spawn thousands of objects at once
 An object pool significantly increases your headroom for spawning lots of objects at runtime, and is almost as convenient as instantiation.  If you're calling `Instantiate()`, chances are that it can be replaced with an object pool.
 
 > Source code and Unity project available at [https://github.com/Toqozz/blog-code/tree/master/object_pool](https://github.com/Toqozz/blog-code/tree/master/object_pool).
-
-
-*[Discuss on GitHub](https://github.com/Toqozz/blog-code/issues/7)*

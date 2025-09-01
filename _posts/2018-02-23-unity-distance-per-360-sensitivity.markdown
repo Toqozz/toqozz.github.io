@@ -215,6 +215,3 @@ And there you have it!  Physical mouse distance per 360 accurately calculated wi
 Hopefully through reading this blog post you have gained the understanding to solve this problem for any engine, and fix any minor issues that may arise in the scripts posted here due to a Unity version change or otherwise.
 
 > *Full scripts available at this [github](https://github.com/Toqozz/blog-code/tree/master/mouse_360) repository.*
-
-
-*[Discuss on GitHub](https://github.com/Toqozz/blog-code/issues/3)*

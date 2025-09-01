@@ -93,37 +93,3 @@ Another solution I thought of was to use a 3D raycast from the camera to the spr
 [Most](https://stackoverflow.com/questions/44143733/unity-correct-sprite-texture-width-height) [solutions](https://gamedev.stackexchange.com/questions/117139/how-to-get-a-pixel-color-from-a-specific-sprite-on-touch-unity) I [found](https://forum.unity.com/threads/uv-texture-coordinates-bounds-using-sprite-packer.400592/) calculate UVs from sprite rect calculations.  Unless you absolutely *never* want to rotate, scale, or flip your sprites, **do not do this**: the calculation will bork.
 
 > Full code and sample scene available at: [https://github.com/Toqozz/blog-code/tree/master/sprite_coordinates](https://github.com/Toqozz/blog-code/tree/master/sprite_coordinates)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
