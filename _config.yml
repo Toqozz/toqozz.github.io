@@ -1,6 +1,6 @@
 #title: Froley Blog
 email: toqoz@hotmail.com
-description: Memory dump, and things I wish I found on google before now.
+description: Interesting things sometimes found here.
 #Write an awesome description for your new site here. You can edit this
 #line in _config.yml. It will appear in your document head meta (for
 #Google search results) and in your feed.xml site description.
@@ -8,6 +8,7 @@ description: Memory dump, and things I wish I found on google before now.
 url: "https://toqoz.fyi" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: Toqoz_
 github_username: Toqozz
+logo: /assets/favicon/favicon-192x192.png
 
 # Build settings
 markdown: kramdown
