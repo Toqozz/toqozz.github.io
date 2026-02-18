@@ -7,6 +7,9 @@ layout: default
 </h1>
 <br>
 <i>{{ page.date | date: "%d %B, %Y" }}</i>
+
+{% include toc.html html=content class="toc" h_min=2 %}
+
 {{ content }}
 
 <hr>
